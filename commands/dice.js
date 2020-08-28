@@ -2,7 +2,7 @@ const { MessageEmbed, MessageAttachment } = require('discord.js');
 const diceImage = new MessageAttachment('./assets/img/dice.png');
 const randomDice = () =>
 {
-    Math.floor(Math.random() *6) + 1;
+    return Math.floor(Math.random() *6) + 1;
 }
 
 module.exports = {
