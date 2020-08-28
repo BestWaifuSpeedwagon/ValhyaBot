@@ -11,6 +11,7 @@ for (const file of commandFiles)
 {
     const command = require(`./commands/${file}`);
     client.commands.set(command.name, command);
+    console.log(`Commande chargée: ${PREFIX}${command.name}`);
 }
 
 client.on('ready', () => 
@@ -25,7 +26,7 @@ client.on('message', (message) =>
     const command = args.shift().toLowerCase();
 
     if (!client.commands.has(command)) return;
-    client.commands.get(command).execute(message, args);
+    client.commands.get(command).execute(client, message, args);
 });
 
 client.login(TOKEN);
