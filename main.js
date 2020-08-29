@@ -46,6 +46,8 @@ client.on('message',
 client.on('ready',
     () => {
         console.log(`Logged in as ${client.user.username} !`);
+        client.user.setStatus("online");
+        client.user.setActivity("Bot en construction !", { type: "STREAMING", url: "https://www.twitch.tv/valhyan" });
     }
 );
 client.login(TOKEN);
