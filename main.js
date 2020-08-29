@@ -14,19 +14,24 @@ for (const file of commandFiles)
     console.log(`Commande chargée: ${PREFIX}${command.name}`);
 }
 
-client.on('ready', () => 
-{
-    console.log(`Logged in as ${client.user.username} !`)
-});
+client.on('ready',
+    () => 
+    {
+        console.log(`Logged in as ${client.user.username} !`);
+    }
+);
+    
+client.on('message',
+    message => 
+    {
+        if(!message.content.startsWith(PREFIX) || message.author.bot) return;
+        
+        const args = message.content.slice(PREFIX.length).split(/ +/);
+        const command = args.shift().toLowerCase();
 
-client.on('message', (message) => 
-{
-    if (!message.content.startsWith(PREFIX) || message.author.bot) return;
-    const args = message.content.slice(PREFIX.length).split(/ +/);
-    const command = args.shift().toLowerCase();
-
-    if (!client.commands.has(command)) return;
-    client.commands.get(command).execute(client, message, args);
-});
+        if (!client.commands.has(command)) return;
+        client.commands.get(command).execute(client, message, args);
+    }
+);
 
 client.login(TOKEN);
