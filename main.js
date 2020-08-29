@@ -40,6 +40,7 @@ client.on('message',
             return message.channel.send(noArgsReply);
         }
         command.run(client, message, args);
+        
     }
 );
 client.on('ready',

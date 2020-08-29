@@ -2,7 +2,6 @@ const { MessageEmbed, MessageAttachment } = require('discord.js');
 
 module.exports.run = (client, message, args) => {
 	const role_mention = message.mentions.roles.first();
-	const str = role_mention == undefined ? "n'existe pas." : role_mention.name;
 
 	const members = role_mention.members.map(m => m.user);
 
