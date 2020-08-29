@@ -29,5 +29,7 @@ module.exports.run = (client, message, args) => {
 
 module.exports.help = {
 	name: "roleinfo",
-	description: "Renvoie les infos d'un role."
+	description: "Renvoie les infos d'un role.",
+	usage: "<role>",
+	args: true,
 }
