@@ -26,10 +26,20 @@ client.on('message',
         if(!message.content.startsWith(PREFIX) || message.author.bot) return;
         
         const args = message.content.slice(PREFIX.length).split(/ +/);
-        const command = args.shift().toLowerCase();
+        const commandName = args.shift().toLowerCase();
 
-        if (!client.commands.has(command)) return;
-        client.commands.get(command).run(client, message, args);
+        if (!client.commands.has(commandName)) return;
+        const command = client.commands.get(commandName);
+
+        if (command.help.args && !args.length) {
+            let noArgsReply = `Il faut des arguments pour cette commande, ${message.author}`;
+
+            if (command.help.usage) {
+            noArgsReply += `\nVoici comment utiliser cette commande: \`${PREFIX}${command.help.name} ${command.help.usage}\``
+            }
+            return message.channel.send(noArgsReply);
+        }
+        command.run(client, message, args);
     }
 );
 client.on('ready',

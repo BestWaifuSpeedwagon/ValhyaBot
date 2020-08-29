@@ -51,5 +51,6 @@ module.exports.run = (client, message, args) => {
 
 module.exports.help = {
     name: "dice",
-    description: "Renvoie la valeur de plusieurs dès."
+    description: "Renvoie la valeur de plusieurs dès.",
+    args: false
 }

@@ -17,4 +17,6 @@ module.exports.run = (client, message, args) => {
 module.exports.help = {
     name: "adds",
     description: "Ajouter plusieurs roles",
+    usage: "<roles à ajouter>",
+    args: true
 }

@@ -29,5 +29,6 @@ module.exports.run = (client, message, args) => {
 
 module.exports.help = {
     name: "embed",
-    description: "Envoie un Embed."
+    description: "Envoie un Embed.",
+    args: false
 }

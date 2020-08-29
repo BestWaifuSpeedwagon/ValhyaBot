@@ -14,4 +14,6 @@ module.exports.run = (client, message, args) => {
 module.exports.help = {
     name: "remove",
     description: "Supprimer un role",
+    usage: "<role à supprimer>",
+    args: true,
 }
