@@ -3,8 +3,8 @@
 //     description: 'Supprimer plusieurs roles',
 //     execute(client, message, args) {
 //         args.forEach(rName => {
-//             const role = message.guild.roles.cache.find(role => role.name === rName.toString());
 //             if (role) {
+//             const role = message.guild.roles.cache.find(role => role.name === rName.toString());
 //                 if (!message.member.roles.cache.has(role.id)) return message.channel.send("Vous n'avez pas ce role !");
 
 //                 message.member.roles.remove(role)
@@ -33,7 +33,8 @@ module.exports.run = (client, message, args) => {
     })
 }
 
-module.exports.help = {
+module.exports.help =
+{
     name: "removes",
     description: "Supprimer plusieurs roles",
     usage: "<roles à supprimer>",
