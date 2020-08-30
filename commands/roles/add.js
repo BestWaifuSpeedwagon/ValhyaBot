@@ -22,6 +22,5 @@ module.exports.help =
     name: "add",
     description: "Ajouter un role",
     usage: "<role à ajouter>",
-    args: true,
-
+    args: true
 }

@@ -1,11 +1,13 @@
 const { MessageEmbed, MessageAttachment } = require('discord.js');
 const diceImage = new MessageAttachment('./assets/img/dice.png');
+
 function randomDice()
 {
     return Math.ceil(Math.random() * 6);
 }
 
-module.exports.run = (client, message, args) => {
+module.exports.run = (client, message, args) =>
+{
     const embed = new MessageEmbed()
         .setColor("#d54e12")
         .setTitle("Random Dice")
@@ -49,7 +51,8 @@ module.exports.run = (client, message, args) => {
     message.channel.send(embed);
 }
 
-module.exports.help = {
+module.exports.help =
+{
     name: "dice",
     description: "Renvoie la valeur de plusieurs dès.",
     args: false

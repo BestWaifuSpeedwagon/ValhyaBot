@@ -1,6 +1,7 @@
 const { MessageEmbed, MessageAttachment } = require('discord.js');
 
-module.exports.run = (client, message, args) => {
+module.exports.run = (client, message, args) =>
+{
 	const role_mention = message.mentions.roles.first();
 
 	const members = role_mention.members.map(m => m.user);
@@ -10,7 +11,8 @@ module.exports.run = (client, message, args) => {
 		.setTitle("Role")*/
 
 	members.forEach(
-		m => {
+		m =>
+		{
 			/*embed.addField(
 				{
 					name: m.username,
@@ -26,9 +28,10 @@ module.exports.run = (client, message, args) => {
 		//message.channel.send(embed);
 }
 
-module.exports.help = {
+module.exports.help =
+{
 	name: "roleinfo",
 	description: "Renvoie les infos d'un role.",
 	usage: "<role>",
-	args: true,
+	args: true
 }

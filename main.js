@@ -7,15 +7,21 @@ client.commands = new Collection();
 
 function loadCommands(dir = "./commands/") 
 {
-    readdirSync(dir).forEach(dirs => {
-        const commands = readdirSync(`${dir}/${dirs}/`).filter(files => files.endsWith(".js"));
+    readdirSync(dir).forEach(
+        dirs =>
+        {
+            const commands = readdirSync(`${dir}/${dirs}/`).filter(files => files.endsWith(".js"));
 
-        for (const file of commands) {
-            const getFileName = require(`${dir}/${dirs}/${file}`);
-            client.commands.set(getFileName.help.name, getFileName);
-            console.log(`Commande chargée: ${PREFIX}${getFileName.help.name}`);
-        };
-    });
+            for (const file of commands)
+            {
+                const getFileName = require(`${dir}/${dirs}/${file}`);
+                
+                client.commands.set(getFileName.help.name, getFileName);
+                
+                console.log(`Commande chargée: ${PREFIX}${getFileName.help.name}`);
+            }
+        }
+    );
 };
 
 loadCommands();
@@ -31,20 +37,22 @@ client.on('message',
         if (!client.commands.has(commandName)) return;
         const command = client.commands.get(commandName);
 
-        if (command.help.args && !args.length) {
+        if (command.help.args && !args.length)
+        {
             let noArgsReply = `Il faut des arguments pour cette commande, ${message.author}`;
 
-            if (command.help.usage) {
-            noArgsReply += `\nVoici comment utiliser cette commande: \`${PREFIX}${command.help.name} ${command.help.usage}\``
+            if (command.help.usage)
+            {
+                noArgsReply += `\nVoici comment utiliser cette commande: \`${PREFIX}${command.help.name} ${command.help.usage}\``
             }
             return message.channel.send(noArgsReply);
         }
         command.run(client, message, args);
-        
     }
 );
 client.on('ready',
-    () => {
+    () =>
+    {
         console.log(`Logged in as ${client.user.username} !`);
         client.user.setStatus("online");
         client.user.setActivity("Bot en construction !", { type: "STREAMING", url: "https://www.twitch.tv/valhyan" });
