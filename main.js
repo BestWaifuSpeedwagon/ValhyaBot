@@ -1,16 +1,16 @@
 const { Client, Collection } = require('discord.js');
 const { TOKEN, PREFIX} = require('./config.js');
-const { readdirSync } = require('fs');
+const fs = require('fs');
 
 const client = new Client();
 client.commands = new Collection();
 
-function loadCommands(dir = "./commands/") 
+function loadCommands(dir = __dirname + "/commands/") 
 {
-    readdirSync(dir).forEach(
+    fs.readdirSync(dir).forEach(
         dirs =>
         {
-            const commands = readdirSync(`${dir}/${dirs}/`).filter(files => files.endsWith(".js"));
+            const commands = fs.readdirSync(`${dir}/${dirs}/`).filter(files => files.endsWith(".js"));
 
             for (const file of commands)
             {
@@ -25,7 +25,7 @@ function loadCommands(dir = "./commands/")
 };
 
 loadCommands();
- 
+
 client.on('message',
     message => 
     {
