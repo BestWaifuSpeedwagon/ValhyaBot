@@ -62,7 +62,7 @@ module.exports.run = (client, message, args) =>
 			client.user.setActivity(`${config.status.name}`, { type: "STREAMING", url: args[1] });
 			break;
 		default:
-			message.channel.send("Liste de commandes disponibles: \n-setStatus\n-setStream");
+			message.channel.send("Liste de commandes disponibles: \n- \`setStatus\` \n- \`setStream\`");
 			break;
 	}
 }
