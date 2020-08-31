@@ -8,7 +8,7 @@ class TwitchApi
 {
 	static get requestOptions()
 	{
-		// Automatically remove "oauth:" prefix if it's present
+		// Automatically remove "oauth:" config.PREFIX if it's present
 		const oauthPrefix = "oauth:";
 		let oauthBearer = config.twitch_oauth_token;
 		if (oauthBearer.startsWith(oauthPrefix))

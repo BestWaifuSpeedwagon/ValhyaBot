@@ -1,5 +1,5 @@
 const { Client, Collection } = require('discord.js');
-const { TOKEN, PREFIX} = require('./config.js');
+const config = require('./config.json');
 const fs = require('fs');
 
 const client = new Client();
@@ -18,7 +18,7 @@ function loadCommands(dir = __dirname + "/commands/")
                 
                 client.commands.set(getFileName.help.name, getFileName);
                 
-                console.log(`Commande chargée: ${PREFIX}${getFileName.help.name}`);
+                console.log(`Commande chargée: ${config.PREFIX}${getFileName.help.name}`);
             }
         }
     );
@@ -29,9 +29,9 @@ loadCommands();
 client.on('message',
     message => 
     {
-        if(!message.content.startsWith(PREFIX) || message.author.bot) return;
+        if(!message.content.startsWith(config.PREFIX) || message.author.bot) return;
         
-        const args = message.content.slice(PREFIX.length).split(/ +/);
+        const args = message.content.slice(config.PREFIX.length).split(/ +/);
         const commandName = args.shift().toLowerCase();
 
         if (!client.commands.has(commandName)) return;
@@ -43,7 +43,7 @@ client.on('message',
 
             if (command.help.usage)
             {
-                noArgsReply += `\nVoici comment utiliser cette commande: \`${PREFIX}${command.help.name} ${command.help.usage}\``
+                noArgsReply += `\nVoici comment utiliser cette commande: \`${config.PREFIX}${command.help.name} ${command.help.usage}\``
             }
             return message.channel.send(noArgsReply);
         }
@@ -58,4 +58,4 @@ client.on('ready',
         client.user.setActivity("Bot en construction !", { type: "STREAMING", url: "https://www.twitch.tv/valhyan" });
     }
 );
-client.login(TOKEN);
+client.login(config.TOKEN);

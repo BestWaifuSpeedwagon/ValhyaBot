@@ -2,15 +2,6 @@ const fs = require('fs');
 
 module.exports.run = (client, message, args) =>
 {
-	console.log(__dirname + "../../../save.txt");
-	
-	fs.writeFile(__dirname + "../../../save.txt", "Ecris!", 'utf8',
-		err =>
-		{
-			if(err){throw err};
-		}
-	);
-		
 	if (!message.member.permissions.has('ADMINISTRATOR')) return message.channel.send("Vous n'êtes pas administrateur!");
 	
 	switch(args[0])
@@ -21,6 +12,22 @@ module.exports.run = (client, message, args) =>
 			{
 				str += args[i] + " ";
 			}	
+			
+			let jsonObject = JSON.stringify(
+				{
+					"status": str
+				}
+			)
+			
+			console.log(jsonObject);
+			console.log(__dirname);
+			
+			fs.writeFile(__dirname + "config.json", "Ecris!", 'utf8',
+				err =>
+				{
+					if (err) { console.log(err) };
+				}
+			);
 			
 			client.user.setActivity(`${str}`, {type: "PLAYING"});
 			message.channel.send(`Changé l'état à ${str} !`);
