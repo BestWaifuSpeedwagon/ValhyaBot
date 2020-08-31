@@ -3,15 +3,15 @@ const XMLHttpRequest = require('xhr2');
 function ajax_get(url, callback)
 {
 	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.onreadystatechange = function ()
+	xmlhttp.onreadystatechange = () =>
 	{
 		if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
 		{
-			console.log('responseText:' + xmlhttp.responseText);
 			try
 			{
 				var data = JSON.parse(xmlhttp.responseText);
-			} catch (err)
+			}
+			catch (err)
 			{
 				console.log(err.message + " in " + xmlhttp.responseText);
 				return;
