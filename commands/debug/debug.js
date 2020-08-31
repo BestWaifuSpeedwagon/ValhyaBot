@@ -1,6 +1,16 @@
 const fs = require('fs');
 let config = require('./../../config.json');
 
+function writeConfig(config)
+{
+	fs.writeFile(__dirname + "../../../config.json", JSON.stringify(config, null, 4),
+		err =>
+		{
+			if (err) { console.log(err) };
+		}
+	);
+}
+
 module.exports.run = (client, message, args) =>
 {
 	if (!message.member.permissions.has('ADMINISTRATOR')) return message.channel.send("Vous n'êtes pas administrateur!");
@@ -13,26 +23,43 @@ module.exports.run = (client, message, args) =>
 			{
 				str += args[i] + " ";
 			}	
+			str = str.substr(0, str.length-1);
 			
-			console.log(config);
-			
-			config = Object.assign(config, { "status": str });
-			
-			console.log(config);
-			
-			/*fs.writeFile(__dirname + "../../../config.json", "{baka: hey}",
-				err =>
+			config = Object.assign(config,
 				{
-					if (err) { console.log(err) };
+					"status": 
+					{
+						"name": str,
+						"type": "PLAYING",
+						"url": ""
+					}
 				}
-			);*/
+			);
 			
-			client.user.setActivity(`${str}`, {type: "PLAYING"});
+			writeConfig(config);
+			
+			client.user.setActivity(`${str}`);
 			message.channel.send(`Changé l'état à ${str} !`);
 			break;
 		case 'setStream':
+			config = Object.assign(config,
+				{
+					"status":
+					{
+						"name": config.status.name,
+						"type": "STREAMING",
+						"url": args[1]
+					}
+				}
+			);
 			
-			client.user.setActivity(`${client.user.presence.activities[0].name}`, { type: "STREAMING", url: args[1] });
+			writeConfig(config);
+			/*console.log(config);
+			console.log(require("./../../config.json"));
+			
+			console.log(client.user.presence.activities);*/
+			
+			client.user.setActivity(`${config.status.name}`, { type: "STREAMING", url: args[1] });
 			break;
 	}
 }
