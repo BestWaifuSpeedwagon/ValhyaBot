@@ -17,17 +17,15 @@ module.exports.run = (client, message, args) =>
 				{
 					"status": str
 				}
-			)
+			);
 			
-			console.log(jsonObject);
-			console.log(__dirname);
 			
-			fs.writeFile(__dirname + "config.json", "Ecris!", 'utf8',
+			/*fs.writeFile(__dirname + "../../../config.json", "{baka: hey}",
 				err =>
 				{
 					if (err) { console.log(err) };
 				}
-			);
+			);*/
 			
 			client.user.setActivity(`${str}`, {type: "PLAYING"});
 			message.channel.send(`Changé l'état à ${str} !`);

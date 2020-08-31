@@ -5,6 +5,8 @@ const fs = require('fs');
 const client = new Client();
 client.commands = new Collection();
 
+//#region Functions
+
 function loadCommands(dir = __dirname + "/commands/") 
 {
     fs.readdirSync(dir).forEach(
@@ -23,6 +25,13 @@ function loadCommands(dir = __dirname + "/commands/")
         }
     );
 };
+
+function writeConfig(key, value)
+{
+    
+}
+
+//#endregion
 
 loadCommands();
 
