@@ -12,7 +12,7 @@ module.exports.run = (client, message) =>
 	{
 		embed.addFields(
 			{
-				name: c[1].help.name,
+				name: `!vbot ${c[1].help.name}`,
 				value: c[1].help.description,
 				inline: false
 			}

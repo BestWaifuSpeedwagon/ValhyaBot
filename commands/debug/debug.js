@@ -1,4 +1,5 @@
 const fs = require('fs');
+let config = require('./../../config.json');
 
 module.exports.run = (client, message, args) =>
 {
@@ -13,12 +14,11 @@ module.exports.run = (client, message, args) =>
 				str += args[i] + " ";
 			}	
 			
-			let jsonObject = JSON.stringify(
-				{
-					"status": str
-				}
-			);
+			console.log(config);
 			
+			config = Object.assign(config, { "status": str });
+			
+			console.log(config);
 			
 			/*fs.writeFile(__dirname + "../../../config.json", "{baka: hey}",
 				err =>
@@ -40,7 +40,7 @@ module.exports.run = (client, message, args) =>
 module.exports.help = 
 {
 	name: "debug",
-	description: "Fait des console.log()",
+	description: "Changer l'état du bot",
 	usage: "<argument>",
 	args: true
 }
