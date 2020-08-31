@@ -2,15 +2,15 @@ const fs = require('fs');
 
 module.exports.run = (client, message, args) =>
 {
-	fs.writeFile(__dirname + "save.txt", "Ecris!", 'utf8',
+	console.log(__dirname + "../../../save.txt");
+	
+	fs.writeFile(__dirname + "../../../save.txt", "Ecris!", 'utf8',
 		err =>
 		{
 			if(err){throw err};
-
-			message.channel.send('Ecris!');
 		}
 	);
-	
+		
 	if (!message.member.permissions.has('ADMINISTRATOR')) return message.channel.send("Vous n'êtes pas administrateur!");
 	
 	switch(args[0])
