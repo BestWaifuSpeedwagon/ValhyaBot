@@ -1,5 +1,17 @@
 const { Client, Collection } = require('discord.js');
 const fs = require('fs');
+const axios = require('axios')
+
+axios.get("https://api.twitch.tv/helix/streams")
+    .then(data =>
+    {
+        console.log(data);
+    })
+    .catch(error =>
+    {
+        // handle error
+        console.log(error);
+    });
 
 const client = new Client();
 client.commands = new Collection();
