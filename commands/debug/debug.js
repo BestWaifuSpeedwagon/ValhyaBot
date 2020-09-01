@@ -3,7 +3,7 @@ let config = require('./../../config.json');
 
 function writeConfig(config)
 {
-	fs.writeFile(__dirname + "../../../config.json", JSON.stringify(config, null, 4),
+	fs.writeFile("./config.json", JSON.stringify(config, null, 4),
 		err =>
 		{
 			if (err) { console.log(err) };
@@ -25,16 +25,7 @@ module.exports.run = (client, message, args) =>
 			}	
 			str = str.substr(0, str.length-1);
 			
-			config = Object.assign(config,
-				{
-					"status": 
-					{
-						"name": str,
-						"type": "PLAYING",
-						"url": ""
-					}
-				}
-			);
+			config = Object.assign(config, { "status": str });
 			
 			writeConfig(config);
 			
@@ -42,23 +33,6 @@ module.exports.run = (client, message, args) =>
 			message.channel.send(`Changé l'état à ${str} !`);
 			break;
 		case 'setStream':
-			config = Object.assign(config,
-				{
-					"status":
-					{
-						"name": config.status.name,
-						"type": "STREAMING",
-						"url": args[1]
-					}
-				}
-			);
-			
-			writeConfig(config);
-			/*console.log(config);
-			console.log(require("./../../config.json"));
-			
-			console.log(client.user.presence.activities);*/
-			
 			client.user.setActivity(`${config.status.name}`, { type: "STREAMING", url: args[1] });
 			break;
 		default:
@@ -70,7 +44,7 @@ module.exports.run = (client, message, args) =>
 module.exports.help = 
 {
 	name: "debug",
-	description: "Changer l'état du bot",
+	description: "Change l'état du bot",
 	usage: "<argument>",
 	args: true
 }

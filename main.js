@@ -1,9 +1,10 @@
 const { Client, Collection } = require('discord.js');
-const config = require('./config.json');
 const fs = require('fs');
 
 const client = new Client();
 client.commands = new Collection();
+
+const config = require('./config.json');
 
 //#region Functions
 
@@ -25,11 +26,6 @@ function loadCommands(dir = __dirname + "/commands/")
         }
     );
 };
-
-function writeConfig(key, value)
-{
-    
-}
 
 //#endregion
 
@@ -59,12 +55,14 @@ client.on('message',
         command.run(client, message, args);
     }
 );
+
 client.on('ready',
     () =>
     {
         console.log(`Logged in as ${client.user.username} !`);
         client.user.setStatus("online");
-        client.user.setActivity(config.status.name, {type: config.status.type, url: config.status.url});
+        
+        client.user.setActivity(config.status.name);
     }
 );
 client.login(config.TOKEN);
