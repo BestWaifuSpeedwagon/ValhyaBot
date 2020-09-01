@@ -2,8 +2,38 @@ const { MessageEmbed, MessageAttachment } = require('discord.js');
 const pollImage = new MessageAttachment('./assets/img/poll.png');
 
 module.exports.run = (client, message, args) =>
-{
+{	
 	if(args.length > 26) return message.channel.send("Il ne peut pas il y avoir plus de 26 arguments!");
+	
+	let regionalIndicators = 
+	[
+		"🇦",
+		"🇧",
+		"🇨",
+		"🇩",
+		"🇪",
+		"🇫",
+		"🇬",
+		"🇭",
+		"🇮",
+		"🇯",
+		"🇰",
+		"🇱",
+		"🇲",
+		"🇳",
+		"🇴",
+		"🇵",
+		"🇶",
+		"🇷",
+		"🇸",
+		"🇹",
+		"🇺",
+		"🇻",
+		"🇼",
+		"🇽",
+		"🇾",
+		"🇿",
+	]
 	
 	let embed = new MessageEmbed()
 		.setColor("#d54e12")
@@ -14,11 +44,10 @@ module.exports.run = (client, message, args) =>
 	let index = 0;
 	for(arg of args)
 	{
-		let emoji = `:regional_indicator_${String.fromCharCode(97+index)}:`;
 		embed.addFields(
 			{
 				name: arg,
-				description: emoji,
+				value: regionalIndicators[index],
 				inline: false
 			}
 		)
@@ -29,16 +58,12 @@ module.exports.run = (client, message, args) =>
 	message.channel.send(embed).then(
 		msg =>
 		{
-			msg.react(":regional_indicator_a:");
-			/*index = 0;
+			let index = 0;
 			for(arg of args)
 			{
-				let emoji = `:regional_indicator_${String.fromCharCode(97 + index)}:`;
-				
-				
-				
+				msg.react(regionalIndicators[index]);
 				index++;
-			}*/
+			}
 		}
 	);
 	
