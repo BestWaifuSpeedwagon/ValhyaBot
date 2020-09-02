@@ -1,9 +1,54 @@
-const { MessageEmbed, MessageAttachment } = require('discord.js');
+const { MessageEmbed, MessageAttachment, Client, Message } = require('discord.js');
 const pollImage = new MessageAttachment('./assets/img/poll.png');
+
+/**
+ * 
+ * @param {Array.<string>} args 
+ * @description Assemble array of strings based on "" character
+ * @returns {Array.<string>}
+ */
+
+function parseQuote(args)
+{
+	
+	
+	let newArgs = [];
+	for(i = 0; i < args.length; i++)
+	{
+		let a = args[i];
+		
+		if(a.startsWith('\"'))
+		{
+			let str = "";
+			
+			do
+			{
+				a = args[i];
+				str += `${a} `;
+				i++;
+			}
+			while(!a.endsWith('\"') && i < args.length)
+			
+			newArgs.push(str);
+			
+			i -= 2;
+		}
+	}
+	return newArgs;
+}
+
+/**
+ * 
+ * @param {Client} client 
+ * @param {Message} message 
+ * @param {Array.<string>} args 
+ */
 
 module.exports.run = (client, message, args) =>
 {	
 	if(args.length > 26) return message.channel.send("Il ne peut pas il y avoir plus de 26 arguments!");
+	
+	args = parseQuote(args);
 	
 	let regionalIndicators = 
 	[
@@ -37,9 +82,11 @@ module.exports.run = (client, message, args) =>
 	
 	let embed = new MessageEmbed()
 		.setColor("#d54e12")
-		.setTitle("Sondage")
+		.setTitle(args[0])
 		.attachFiles(pollImage)
 		.setThumbnail('attachment://poll.png');
+	
+	args.shift();
 	
 	let index = 0;
 	for(arg of args)

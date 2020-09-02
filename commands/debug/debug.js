@@ -1,15 +1,4 @@
 const fs = require('fs');
-let config = require('./../../config.json');
-
-function writeConfig(config)
-{
-	fs.writeFile("./config.json", JSON.stringify(config, null, 4),
-		err =>
-		{
-			if (err) { console.log(err) };
-		}
-	);
-}
 
 module.exports.run = (client, message, args) =>
 {
@@ -25,15 +14,11 @@ module.exports.run = (client, message, args) =>
 			}	
 			str = str.substr(0, str.length-1);
 			
-			config = Object.assign(config, { "status": str });
-			
-			writeConfig(config);
-			
 			client.user.setActivity(`${str}`);
 			message.channel.send(`Changé l'état à ${str} !`);
 			break;
 		case 'setStream':
-			client.user.setActivity(`${config.status.name}`, { type: "STREAMING", url: args[1] });
+			client.user.setActivity(`${client.user.presence.activities[0].name}`, { type: "STREAMING", url: args[1] });
 			break;
 		default:
 			message.channel.send("Liste de commandes disponibles: \n- \`setStatus\` \n- \`setStream\`");

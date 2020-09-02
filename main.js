@@ -1,22 +1,12 @@
-const { Client, Collection } = require('discord.js');
-const fs = require('fs');
-const axios = require('axios')
+const config = require('./config.json');
 
-axios.get("https://api.twitch.tv/helix/streams")
-    .then(data =>
-    {
-        console.log(data);
-    })
-    .catch(error =>
-    {
-        // handle error
-        console.log(error);
-    });
+const { Client, Collection, ClientApplication } = require('discord.js');
+const fs = require('fs');
+const { help } = require('./commands/reactions/poll');
 
 const client = new Client();
 client.commands = new Collection();
 
-const config = require('./config.json');
 
 //#region Functions
 
@@ -32,6 +22,8 @@ function loadCommands(dir = __dirname + "/commands/")
                 const getFileName = require(`${dir}/${dirs}/${file}`);
                 
                 client.commands.set(getFileName.help.name, getFileName);
+                
+                //if(getFileName.help.name == undefined) console.log()
                 
                 console.log(`Commande chargée: ${config.PREFIX}${getFileName.help.name}`);
             }
@@ -74,7 +66,7 @@ client.on('ready',
         console.log(`Logged in as ${client.user.username} !`);
         client.user.setStatus("online");
         
-        client.user.setActivity(config.status.name);
+        client.user.setActivity("!vbot", {type: "LISTENING"});
     }
 );
 client.login(config.TOKEN);
