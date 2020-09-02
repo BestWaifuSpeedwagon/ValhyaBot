@@ -25,7 +25,7 @@ function loadCommands(dir = __dirname + "/commands/")
                 
                 //if(getFileName.help.name == undefined) console.log()
                 
-                console.log(`Commande chargée: ${config.PREFIX}${getFileName.help.name}`);
+                //console.log(`Commande chargée: ${config.PREFIX}${getFileName.help.name}`);
             }
         }
     );
