@@ -38,6 +38,6 @@ module.exports.run = function(client, message)
 module.exports.help =
 {
 	name: 'cat',
-	description: 'Send random picture of cats',
+	description: 'Envoie une image aléatoire de chat.',
 	args: false
 }
