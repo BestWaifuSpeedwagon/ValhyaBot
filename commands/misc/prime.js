@@ -15,15 +15,15 @@ module.exports.run = (client, message, args) =>
 
 	for (i = 2; i < nSqr; i++)
 	{
-		if (n % i == 0) return message.channel.send(n + " est un nombre primaire!");;
+		if (n % i == 0) return message.channel.send(n + " est un nombre primaire !");;
 	}
 
-	message.channel.send(n + " n'est pas un nombre primaire!");
+	message.channel.send(n + " n'est pas un nombre primaire !");
 }
 
 module.exports.help = 
 {
 	name: "prime",
-	description: "Check if a number is prime",
+	description: "Voit si un nombre est primaire",
 	args: true
 }
