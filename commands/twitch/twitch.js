@@ -1,4 +1,4 @@
-const http = require('http');
+const http = require('https');
 const { Client, Message } = require('discord.js');
 const config = require('../../config.json');
 
@@ -11,13 +11,14 @@ const config = require('../../config.json');
  
 module.exports.run = function(client, message)
 {
+	//
 	let options =
 	{
 		hostname: 'api.twitch.tv',
-		path: '/kraken/users?login=Valhyan',
+		path: '/kraken/streams/45788228',
 		headers:
 		{
-			'Client-ID': 'ztougvca0l7zhxzq0wae55s3an0ljk',
+			'Client-ID': config.twitchID,
 			'Accept': 'application/vnd.twitchtv.v5+json'
 		}
 	};
@@ -33,15 +34,13 @@ module.exports.run = function(client, message)
 			res.on('end',
 				() =>
 				{
-					try
-					{
-						const parsedData = JSON.parse(rawData);
-						console.log(parsedData);
-					}
-					catch (e)
-					{
-						console.error(e.message);
-					}
+					let parsedData = JSON.parse(rawData);
+					
+					console.log(parsedData);
+					
+					if(parsedData.stream == null) return message.channel.send("Valhyan n'est pas en ligne!");
+					
+					return message.channel.send("Valhyan est en ligne! Venez voir le roi du choo choo \nhttps://www.twitch.tv/Valhyan")
 				}
 			);
 		}
