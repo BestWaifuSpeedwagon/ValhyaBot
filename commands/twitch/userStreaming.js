@@ -14,7 +14,22 @@ const twitch = require('../../libraries/twitch.js');
  
 module.exports.run = function(client, message, args)
 {
-	twitch.checkUserLive(message.channel, args[0]);
+	let stream = twitch.getUserStream(args[0]);
+	
+	console.log(stream);
+	
+	if(stream === undefined)
+	{
+		message.channel.send(`${args[0]} n'existe pas!`)
+	}
+	else if(stream === null)
+	{
+		message.channel.send(`${args[0]} n'est pas en ligne!`);
+	}
+	else
+	{
+		message.channel.send(`${args[0]} est en ligne et joue à ${stream.game}! ${stream.preview.large}\nVenez voir le roi du choo choo \nhttps://www.twitch.tv/${args[0]}`);
+	}
 }
 
 module.exports.help = 

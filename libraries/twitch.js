@@ -1,14 +1,12 @@
 const https = require('https');
-const { Message, TextChannel } = require('discord.js');
 const config = require('../config.json');
 
 /**
  * 
- * @param {TextChannel} channel
  * @param {string} name 
  */
 
-function checkUserLive(channel, name)
+function getUserStream(name)
 {
 	let options =
 	{
@@ -31,7 +29,9 @@ function checkUserLive(channel, name)
 				() =>
 				{
 					let parsedData = JSON.parse(rawData);
-					if(parsedData._total === 0) return channel.send(`${name} n'existe pas!`);
+					
+					
+					if(parsedData._total === 0) return undefined;
 					
 					const id = parsedData.users[0]._id;
 					
@@ -49,10 +49,10 @@ function checkUserLive(channel, name)
 								() =>
 								{
 									parsedData = JSON.parse(rawData);
-
-									if (parsedData.stream == null) return channel.send(`${name} n'est pas en ligne!`);
-
-									return channel.send(`${name} est en ligne! Venez voir le roi du choo choo \nhttps://www.twitch.tv/${name}`);
+									
+									console.log(parsedData);
+									
+									return parsedData;
 								}
 							);
 						}
@@ -77,4 +77,4 @@ function checkUserLive(channel, name)
 	);
 }
 
-exports.checkUserLive = checkUserLive;
+exports.getUserStream = getUserStream;
