@@ -1,20 +1,19 @@
 const https = require('https');
-const { Client, Message } = require('discord.js');
-const config = require(`${__dirname}/config.json`);
+const { Message, TextChannel } = require('discord.js');
+const config = require('../config.json');
 
 /**
  * 
- * @param {Client} client 
- * @param {Message} message 
- * @param {string[]} name 
+ * @param {TextChannel} channel
+ * @param {string} name 
  */
 
-function userRequest(client, message, name)
+function checkUserLive(channel, name)
 {
 	let options =
 	{
 		hostname: 'api.twitch.tv',
-		path: `/kraken/users?login=${name[0]}`,
+		path: `/kraken/users?login=${name}`,
 		headers:
 		{
 			'Client-ID': config.twitchID,
@@ -22,13 +21,9 @@ function userRequest(client, message, name)
 		}
 	};
 	
-	const id;
-	
 	let req = https.get(options,
 		res =>
 		{
-			console.log(res.headers);
-
 			res.setEncoding('utf8');
 			let rawData = '';
 			res.on('data', (chunk) => { rawData += chunk; });
@@ -36,35 +31,43 @@ function userRequest(client, message, name)
 				() =>
 				{
 					let parsedData = JSON.parse(rawData);
+					if(parsedData._total === 0) return channel.send(`${name} n'existe pas!`);
 					
-					console.log(parsedData);
+					const id = parsedData.users[0]._id;
 					
-					
+					options.path = `/kraken/streams/${id}`;
+
+					https.get(options,
+						res =>
+						{
+							res.setEncoding('utf8');
+
+							let rawData = '';
+							res.on('data', (chunk) => { rawData += chunk; });
+
+							res.on('end',
+								() =>
+								{
+									parsedData = JSON.parse(rawData);
+
+									if (parsedData.stream == null) return channel.send(`${name} n'est pas en ligne!`);
+
+									return channel.send(`${name} est en ligne! Venez voir le roi du choo choo \nhttps://www.twitch.tv/${name}`);
+								}
+							);
+						}
+					).on('error', console.log);
 				}
 			);
 		}
-	);
+	).on('error', console.log);
 	
-	req.on('error', 
-		e =>
-		{
-			console.log(`Error: ${e}`);
-		}
-	);
-	
-	req.on('end',
+	req.on('finished',
 		() =>
 		{
-			req = https.get(options,
-				res =>
-				{
-					if (parsedData.stream == null) return message.channel.send("Valhyan n'est pas en ligne!");
+			
 
-					return message.channel.send("Valhyan est en ligne! Venez voir le roi du choo choo \nhttps://www.twitch.tv/Valhyan");
-				}
-			);
-
-			req.on('error',
+			newReq.on('error',
 				e =>
 				{
 					console.log(`Error: ${e}`);
@@ -74,16 +77,4 @@ function userRequest(client, message, name)
 	);
 }
 
-
-
-module.exports.help = 
-{
-	name: "twitch",
-	description: "Get twitch streams",
-	args: false
-}
-
-function newFunction(options)
-{
-	Object.assign(options, { path: '' });
-}
+exports.checkUserLive = checkUserLive;
