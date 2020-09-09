@@ -67,6 +67,9 @@ client.on('ready',
         client.user.setStatus("online");
         
         client.user.setActivity("!vbot", {type: "LISTENING"});
+        
+
+        //let channel = client.guilds.cache.array()[0].channels.cache.filter(channel => channel.name === "discutaille").array()[0];
     }
 );
 client.login(config.TOKEN);
