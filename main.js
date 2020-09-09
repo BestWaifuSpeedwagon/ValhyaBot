@@ -69,8 +69,6 @@ client.on('ready',
         
         client.user.setActivity("!vbot", {type: "LISTENING"});
         
-        console.log(twitch.getUserStream("Valhyan"));
-        
 
         //let channel = client.guilds.cache.array()[0].channels.cache.filter(channel => channel.name === "discutaille").array()[0];
     }

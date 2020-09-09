@@ -1,5 +1,5 @@
 const http = require('https');
-const { Client, Message } = require('discord.js');
+const { Client, Message, MessageEmbed } = require('discord.js');
 const config = require('../../config.json');
 
 const twitch = require('../../libraries/twitch.js');
@@ -12,23 +12,29 @@ const twitch = require('../../libraries/twitch.js');
  */
 
  
-module.exports.run = function(client, message, args)
+module.exports.run = async function(client, message, args)
 {
-	let stream = twitch.getUserStream(args[0]);
+	let stream = (await twitch.getUserStream(args[0])).stream;
 	
-	console.log(stream);
-	
-	if(stream === undefined)
+	switch(stream)
 	{
-		message.channel.send(`${args[0]} n'existe pas!`)
-	}
-	else if(stream === null)
-	{
-		message.channel.send(`${args[0]} n'est pas en ligne!`);
-	}
-	else
-	{
-		message.channel.send(`${args[0]} est en ligne et joue à ${stream.game}! ${stream.preview.large}\nVenez voir le roi du choo choo \nhttps://www.twitch.tv/${args[0]}`);
+		case undefined:
+			message.channel.send(`${args[0]} n'existe pas!`);
+			break;
+		case null:
+			message.channel.send(`${args[0]} n'est pas en ligne!`);
+			break;
+		default:
+			let embed = new MessageEmbed()
+				.setColor("#d54e12")
+				.setTitle(`${args[0]} est en stream!`)
+				.setImage(stream.preview.large)
+			
+			embed.addField('Jeu: ', stream.game);
+			embed.addField(args[0].toLowerCase() === 'valhyan' ? 'Venez voir le roi du choo choo' : 'Lien du stream', `https://www.twitch.tv/${args[0]}`);
+			
+			message.channel.send(embed);
+			break;
 	}
 }
 

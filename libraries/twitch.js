@@ -18,63 +18,51 @@ function getUserStream(name)
 			'Accept': 'application/vnd.twitchtv.v5+json'
 		}
 	};
-	
-	let req = https.get(options,
-		res =>
+	return new Promise(
+		(resolve, reject) =>
 		{
-			res.setEncoding('utf8');
-			let rawData = '';
-			res.on('data', (chunk) => { rawData += chunk; });
-			res.on('end',
-				() =>
+			https.get(options,
+				res =>
 				{
-					let parsedData = JSON.parse(rawData);
-					
-					
-					if(parsedData._total === 0) return undefined;
-					
-					const id = parsedData.users[0]._id;
-					
-					options.path = `/kraken/streams/${id}`;
-
-					https.get(options,
-						res =>
+					res.setEncoding('utf8');
+					let rawData = '';
+					res.on('data', (chunk) => { rawData += chunk; });
+					res.on('end',
+						() =>
 						{
-							res.setEncoding('utf8');
+							let parsedData = JSON.parse(rawData);
 
-							let rawData = '';
-							res.on('data', (chunk) => { rawData += chunk; });
 
-							res.on('end',
-								() =>
+							if (parsedData._total === 0) return undefined;
+
+							const id = parsedData.users[0]._id;
+
+							options.path = `/kraken/streams/${id}`;
+
+							https.get(options,
+								res =>
 								{
-									parsedData = JSON.parse(rawData);
-									
-									console.log(parsedData);
-									
-									return parsedData;
-								}
-							);
-						}
-					).on('error', console.log);
-				}
-			);
-		}
-	).on('error', console.log);
-	
-	req.on('finished',
-		() =>
-		{
-			
+									res.setEncoding('utf8');
 
-			newReq.on('error',
-				e =>
-				{
-					console.log(`Error: ${e}`);
+									let rawData = '';
+									res.on('data', (chunk) => { rawData += chunk; });
+
+									res.on('end',
+										() =>
+										{
+											parsedData = JSON.parse(rawData);
+
+											resolve(parsedData);
+										}
+									);
+								}
+							).on('error', reject);
+						}
+					);
 				}
-			);
+			).on('error', reject);
 		}
-	);
+	)
 }
 
 exports.getUserStream = getUserStream;
