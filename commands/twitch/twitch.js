@@ -14,19 +14,36 @@ module.exports.run = function(client, message)
 	let options =
 	{
 		hostname: 'api.twitch.tv',
-		path: '/helix/streams?users?login=valhyan',
+		path: '/kraken/users?login=Valhyan',
 		headers:
 		{
-			'Client-ID': config.twitchID
+			'Client-ID': 'ztougvca0l7zhxzq0wae55s3an0ljk',
+			'Accept': 'application/vnd.twitchtv.v5+json'
 		}
 	};
-	
-	let req = http.get(options, 
+
+	let req = http.get(options,
 		res =>
 		{
 			console.log(res.headers);
-			
-			//console.log(res);
+
+			res.setEncoding('utf8');
+			let rawData = '';
+			res.on('data', (chunk) => { rawData += chunk; });
+			res.on('end',
+				() =>
+				{
+					try
+					{
+						const parsedData = JSON.parse(rawData);
+						console.log(parsedData);
+					}
+					catch (e)
+					{
+						console.error(e.message);
+					}
+				}
+			);
 		}
 	);
 	
@@ -36,13 +53,6 @@ module.exports.run = function(client, message)
 			console.log(`Error: ${e}`);
 		}
 	);
-	
-	req.on('response',
-		res =>
-		{
-			console.log(res);
-		}
-	)
 }
 
 
