@@ -1,6 +1,13 @@
+const config =
+{
+	TOKEN: process.env.TOKEN,
+	PREFIX: process.env.PREFIX,
+	twitchID: process.env.twitchID
+}
+
 const http = require('https');
+
 const { Client, Message, MessageEmbed } = require('discord.js');
-const config = require('../../config.json');
 
 const twitch = require('../../libraries/twitch.js');
 

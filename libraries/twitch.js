@@ -1,5 +1,11 @@
+const config =
+{
+	TOKEN: process.env.TOKEN,
+	PREFIX: process.env.PREFIX,
+	twitchID: process.env.twitchID
+}
+
 const https = require('https');
-const config = require('../config.json');
 
 /**
  * 

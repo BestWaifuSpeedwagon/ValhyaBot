@@ -1,4 +1,12 @@
-const config = require('./config.json');
+require('dotenv').config();
+//Charge le .env dans process.env
+const config = 
+{
+    TOKEN: process.env.TOKEN,
+    PREFIX: process.env.PREFIX,
+    twitchID: process.env.twitchID
+}
+
 
 const { Client, Collection, ClientApplication } = require('discord.js');
 const fs = require('fs');
