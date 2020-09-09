@@ -8,6 +8,7 @@ const config =
     twitchID: process.env.twitchID
 }
 
+
 const { Client, Collection, ClientApplication } = require('discord.js');
 const fs = require('fs');
 const { help } = require('./commands/reactions/poll');
