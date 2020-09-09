@@ -40,8 +40,8 @@ module.exports.run = function(client, message)
 					
 					if(parsedData.stream == null) return message.channel.send("Valhyan n'est pas en ligne!");
 					
-					return message.channel.send("Valhyan est en ligne! Venez voir le roi du choo choo \nhttps://www.twitch.tv/Valhyan");
 					client.user.setActivity(`${client.user.presence.activities[0].name}`, { type: "STREAMING", url: "https://www.twitch.tv/Valhyan" });
+					return message.channel.send("Valhyan est en ligne! Venez voir le roi du choo choo \nhttps://www.twitch.tv/Valhyan");
 				}
 			);
 		}
