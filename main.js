@@ -78,35 +78,48 @@ client.on('ready',
         client.user.setStatus("online");
         
         client.user.setActivity("!vbot", {type: "LISTENING"});
-        
         //Trouver une channel spécifique
         //let channel = client.guilds.cache.find(guild => guild.name === "NOM").channels.cache.find(channel => channel.id === "ID");
+        
+        //Vérifier le stream toutes les minutes
+        let streamData = require('./data/stream.json');
+
+        let infoChannel = client.guilds.cache.find(g => g.name === "Valhyan").channels.cache.find(c => c.id === "696064128934215710");
+        // let infoChannel = client.guilds.cache.find(g => g.name === "Land of JS").channels.cache.find(c => c.name === "bot-test");
+        setInterval(
+            () =>
+            {
+                twitch.getUserStream("Thalounette").then(
+                    stream =>
+                    {
+                        stream = stream.stream; //Obtenir le contenu de la promise
+                        
+                        if (stream === null)
+                        {
+                            if (!streamData.online) return;
+                            
+                            infoChannel.send("Thalounette n'est plus en ligne.");
+                            
+                            streamData.online = false;
+                            fs.writeFile('./data/stream.json', JSON.stringify(streamData, null, 4), e => {if(e) console.log(e)});
+                        }
+                        else
+                        {
+                            if (streamData.online) return;
+
+                            infoChannel.send(twitch.twitchEmbed("Thalounette", stream));
+
+                            streamData.online = true;
+                            fs.writeFile('./data/stream.json', JSON.stringify(streamData, null, 4), e => {if(e) console.log(e)});
+                        }
+                    }
+                ).catch(e => console.log(e));
+            },
+            60000
+        )
     }
 );
 
-let streamData = require('./data/stream.json');
-let infoChannel = client.guilds.cache.find(g => g.name === "Valhyan").channels.cache.find(c => c.id === "696064128934215710");
-setInterval(
-    async () =>
-    {
-        let streaming = (await twitch.getUserStream("Valhyan")).stream;
-        
-        if (streaming !== null)
-        {
-            if (streamData.online) return;
-            
-            infoChannel.send(twitch.twitchEmbed("Valhyan", streaming));
-            
-            streamData.online = true;
-            fs.writeFile('./data/stream.json', JSON.stringify(streamData, null, 4));
-        }
-        else
-        {
-            streamData.online = false;
-            fs.writeFile('./data/stream.json', JSON.stringify(streamData, null, 4));
-        }
-    },
-    60000
-)
+
 
 client.login(config.TOKEN);
