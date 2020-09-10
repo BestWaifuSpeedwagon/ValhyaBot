@@ -1,13 +1,4 @@
-const config =
-{
-	TOKEN: process.env.TOKEN,
-	PREFIX: process.env.PREFIX,
-	twitchID: process.env.twitchID
-}
-
-const http = require('https');
-
-const { Client, Message, MessageEmbed } = require('discord.js');
+const { Client, Message } = require('discord.js');
 
 const twitch = require('../../libraries/twitch.js');
 
@@ -32,15 +23,7 @@ module.exports.run = async function(client, message, args)
 			message.channel.send(`${args[0]} n'est pas en ligne!`);
 			break;
 		default:
-			let embed = new MessageEmbed()
-				.setColor("#d54e12")
-				.setTitle(`${args[0]} est en stream!`)
-				.setImage(stream.preview.large)
-			
-			embed.addField('Jeu: ', stream.game);
-			embed.addField(args[0].toLowerCase() === 'valhyan' ? 'Venez voir le roi du choo choo' : 'Lien du stream', `https://www.twitch.tv/${args[0]}`);
-			
-			message.channel.send(embed);
+			message.channel.send(twitch.twitchEmbed(args[0], stream));
 			break;
 	}
 }

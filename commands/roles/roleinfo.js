@@ -1,31 +1,30 @@
-const { MessageEmbed, MessageAttachment } = require('discord.js');
+const { MessageEmbed, MessageAttachment, Client, Message } = require('discord.js');
+
+/**
+ * 
+ * @param {Client} client 
+ * @param {Message} message 
+ * @param {string[]} args 
+ */
 
 module.exports.run = (client, message, args) =>
 {
-	const role_mention = message.mentions.roles.first();
+	const role_mention = message.guild.roles.cache.find(role => role.name === args[0].toString());
 
 	const members = role_mention.members.map(m => m.user);
 
-	/*let embed = new MessageEmbed()
+	let embed = new MessageEmbed()
 		.setColor("#d54e12")
-		.setTitle("Role")*/
-
+		.setTitle("Information de rôle")
+	
 	members.forEach(
 		m =>
 		{
-			/*embed.addField(
-				{
-					name: m.username,
-					value: m.avatarURL(),
-					inline: false
-				}
-			)*/
-
-			message.channel.send(m.username, { files: [m.avatarURL()] });
+			embed.addField(m.username, m.avatarURL());
 		}
 	);
-
-		//message.channel.send(embed);
+	
+	message.channel.send(embed);
 }
 
 module.exports.help =

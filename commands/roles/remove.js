@@ -20,6 +20,8 @@
 
 module.exports.run = (client, message, args) =>
 {
+    args = args.join(' ').split('  ');
+
     args.forEach(
         rName =>
         {

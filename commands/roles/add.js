@@ -8,6 +8,8 @@ const { Client, Message } = require("discord.js");
  */
  
 module.exports.run = (client, message, args) => {
+    args = args.join(' ').split('  ');
+    
     args.forEach(
         rName => {
             const role = message.guild.roles.cache.find(role => role.name === rName.toString());
@@ -15,7 +17,7 @@ module.exports.run = (client, message, args) => {
             if (role)
             {
                 if (message.member.roles.cache.has(role.id)) return message.channel.send("Vous avez déjà ce rôle !");
-                if (role.permissions.has('KICK_MEMBERS')) return message.channel.send("Vous ne pouvez pas avoir ce rôle !");
+                if (!message.author.presence.member.roles.highest.permissions.has("ADMINISTRATOR")) return message.channel.send("Vous ne pouvez pas avoir ce rôle !");
                 
                 message.member.roles.add(role)
                     .then(m => message.channel.send(`Vous possédez maintenant le role ${role}.`))

@@ -9,7 +9,7 @@ const config =
 }
 
 
-const { Client, Collection, ClientApplication } = require('discord.js');
+const { Client, Collection, ClientApplication, TextChannel } = require('discord.js');
 const fs = require('fs');
 const { help } = require('./commands/reactions/poll');
 
@@ -17,6 +17,7 @@ const client = new Client();
 client.commands = new Collection();
 
 const twitch = require('./libraries/twitch.js');
+const { setInterval } = require('timers');
 
 //#region Functions
 
@@ -78,9 +79,34 @@ client.on('ready',
         
         client.user.setActivity("!vbot", {type: "LISTENING"});
         
-
-        //let channel = client.guilds.cache.array()[0].channels.cache.filter(channel => channel.name === "discutaille").array()[0];
+        //Trouver une channel spécifique
+        //let channel = client.guilds.cache.find(guild => guild.name === "NOM").channels.cache.find(channel => channel.id === "ID");
     }
 );
+
+let streamData = require('./data/stream.json');
+let infoChannel = client.guilds.cache.find(g => g.name === "Valhyan").channels.cache.find(c => c.id === "696064128934215710");
+setInterval(
+    async () =>
+    {
+        let streaming = (await twitch.getUserStream("Valhyan")).stream;
+        
+        if (streaming !== null)
+        {
+            if (streamData.online) return;
+            
+            infoChannel.send(twitch.twitchEmbed("Valhyan", streaming));
+            
+            streamData.online = true;
+            fs.writeFile('./data/stream.json', JSON.stringify(streamData, null, 4));
+        }
+        else
+        {
+            streamData.online = false;
+            fs.writeFile('./data/stream.json', JSON.stringify(streamData, null, 4));
+        }
+    },
+    60000
+)
 
 client.login(config.TOKEN);

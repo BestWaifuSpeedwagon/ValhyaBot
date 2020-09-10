@@ -6,6 +6,7 @@ const config =
 }
 
 const https = require('https');
+const { MessageEmbed } = require('discord.js');
 
 /**
  * 
@@ -71,4 +72,26 @@ function getUserStream(name)
 	)
 }
 
+/**
+ * 
+ * @param {string} name 
+ * @param {object} stream 
+ */
+
+function twitchEmbed(name, stream)
+{
+	//.game, stream.preview.large
+	let embed = new MessageEmbed()
+		.setColor("#d54e12")
+		.setTitle(`${name} est en stream!`)
+		.setImage(stream.preview.large)
+
+	embed.addField('Jeu: ', stream.game);
+	embed.addField(name.toLowerCase() === 'valhyan' ? 'Venez voir le roi du choo choo' : 'Lien du stream', `https://www.twitch.tv/${name}`);
+	
+	return embed;
+}
+
+
 exports.getUserStream = getUserStream;
+exports.twitchEmbed = twitchEmbed;
