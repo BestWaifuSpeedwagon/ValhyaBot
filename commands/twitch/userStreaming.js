@@ -12,7 +12,9 @@ const twitch = require('../../libraries/twitch.js');
  
 module.exports.run = async function(client, message, args)
 {
-	let stream = (await twitch.getUserStream(args[0])).stream;
+	let _id = await twitch.getUserId(args[0]);
+	
+	let stream = await twitch.getUserStream(_id);
 	
 	switch(stream)
 	{

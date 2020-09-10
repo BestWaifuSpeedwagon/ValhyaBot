@@ -17,7 +17,7 @@ const client = new Client();
 client.commands = new Collection();
 
 const twitch = require('./libraries/twitch.js');
-const { setInterval } = require('timers');
+const { setInterval, setTimeout } = require('timers');
 
 //#region Functions
 
@@ -72,7 +72,7 @@ client.on('message',
 );
 
 client.on('ready',
-    () =>
+    async () =>
     {
         console.log(`Logged in as ${client.user.username} !`);
         client.user.setStatus("online");
@@ -81,39 +81,73 @@ client.on('ready',
         //Trouver une channel spécifique
         //let channel = client.guilds.cache.find(guild => guild.name === "NOM").channels.cache.find(channel => channel.id === "ID");
         
-        //Vérifier le stream toutes les minutes
-        let streamData = require('./data/stream.json');
-
-        let infoChannel = client.guilds.cache.find(g => g.name === "Valhyan").channels.cache.find(c => c.id === "696064128934215710");
-        // let infoChannel = client.guilds.cache.find(g => g.name === "Land of JS").channels.cache.find(c => c.name === "bot-test");
-        setInterval(
-            () =>
+        
+        ///Vérifie le stream toutes les minutes
+        
+        //Créer tout les streamers
+        class Streamer
+        {
+            constructor(name)
             {
-                twitch.getUserStream("Thalounette").then(
-                    stream =>
+                this.name = name;
+                this.id = '';
+                
+                this.online = false;
+            }
+        }
+        
+        let streamers =
+        [
+            new Streamer('Valhyan'    ),
+            new Streamer('Thalounette'),
+            new Streamer('delphes99'  ),
+            new Streamer('neight___'  ),
+            new Streamer('thomasc2607')
+        ];
+        
+        //Obtenir les ids des streamers
+        
+        streamers.forEach(
+            async s => 
+            {
+                let _id = await twitch.getUserId(s.name);
+                
+                s.id = _id;
+            }
+        );
+        
+        //Obtenir id du salon info / bot-test
+
+        /** @type {TextChannel} */
+        // let infoChannel = client.guilds.cache.find(g => g.name === "Valhyan").channels.cache.find(c => c.id === "696064128934215710");
+        let infoChannel = client.guilds.cache.find(g => g.name === "Land of JS").channels.cache.find(c => c.name === "bot-test");
+        
+        
+        setInterval(
+            async () =>
+            {
+                for(let streamer of streamers)
+                {
+                    let stream = await twitch.getUserStream(streamer.id);
+                    
+                    if(stream === null) //Pas de stream en cours
                     {
-                        stream = stream.stream; //Obtenir le contenu de la promise
+                        if(!streamer.online) continue; //Vérifie si on le sait déjà
                         
-                        if (stream === null)
-                        {
-                            if (!streamData.online) return;
-                            
-                            infoChannel.send("Thalounette n'est plus en ligne.");
-                            
-                            streamData.online = false;
-                            fs.writeFile('./data/stream.json', JSON.stringify(streamData, null, 4), e => {if(e) console.log(e)});
-                        }
-                        else
-                        {
-                            if (streamData.online) return;
-
-                            infoChannel.send(twitch.twitchEmbed("Thalounette", stream));
-
-                            streamData.online = true;
-                            fs.writeFile('./data/stream.json', JSON.stringify(streamData, null, 4), e => {if(e) console.log(e)});
-                        }
+                        infoChannel.send(`${stream.channel.display_name} n'est plus en ligne.`);
+                        
+                        streamer.online = false;
                     }
-                ).catch(e => console.log(e));
+                    else //Stream en cours
+                    {
+                        if(streamer.online) continue; //Vérifie si on le sait déjà
+                        
+                        //Envoie un embed
+                        infoChannel.send(twitch.twitchEmbed(stream.channel.display_name, stream));
+                        
+                        streamer.online = true;
+                    }
+                }
             },
             60000
         )
