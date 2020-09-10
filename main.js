@@ -1,8 +1,5 @@
-console.log(process.env);
-
 require('dotenv').config();
 //Charge le .env dans process.env
-console.log(process.env);
 
 const config = 
 {
