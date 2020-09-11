@@ -48,7 +48,52 @@ exports.run = async function(client, message)
 		return ['⬅️', '➡️', '⬆️', '⬇️'].includes(reaction.emoji.name) && user.id === message.author.id;
 	}
 	
-	//grid.awaitReactions()
+	let deprecated = false;
+	while(!deprecated)
+	{
+		let collector = message.createReactionCollector(filter, {time: 50000});
+		await new Promise(
+			() =>
+			{
+				collector.on('collect',
+					e =>
+					{
+						switch(e)
+						{
+							case '⬅️':
+								position.x--;
+								break;
+							case '➡️':
+								position.x++;
+								break;
+							case '⬆️':
+								position.y--;
+								break;
+							case '⬇️':
+								position.y++;
+								break;
+						}
+
+						if(position.x > 9)
+							position.x = 0;
+						if(position.x < 0)
+							position.x = 9;
+
+						if(position.y > 9)
+							position.y = 0;
+						if(position.y < 0)
+							position.y = 9;
+
+						grid.edit(renderGrid(position));
+						e.users.remove(message.author.id);
+						resolve();
+					}
+				);
+			}
+		);
+		
+		collector.on('end', deprecated = true);
+	}
 }
 
 exports.help = 
