@@ -98,6 +98,8 @@ exports.run = async function(client, message)
 					position.y = 9;
 			}
 		);
+		
+		grid.edit(renderGrid(position));
 	}
 }
 
