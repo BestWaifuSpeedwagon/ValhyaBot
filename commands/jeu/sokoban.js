@@ -41,63 +41,64 @@ exports.run = async function(client, message)
 	await grid.react('➡️');
 	await grid.react('⬆️');
 	await grid.react('⬇️');
+	await grid.react('❌');
 	
 	const filter = function(reaction, user)
 	{
-		return ['⬅️', '➡️', '⬆️', '⬇️'].includes(reaction._emoji.name) && user.id === message.author.id;;
+		return ['⬅️', '➡️', '⬆️', '⬇️', '❌'].includes(reaction._emoji.name) && user.id === message.author.id;
 	}
 	
-	
-	let emoji = grid.awaitReactions(filter, {time: 10000})
-	.then(
-		emoji => 
-		{
-			let reaction = grid.reactions.cache.filter(r => r.count > 1);
-			reaction.forEach(
-				r =>
-				{
-					r.remove();
-					grid.react(r.emoji.name);
-				}
-			)
-			
-			emoji.forEach(
-				e =>
-				{
-					switch(e.emoji.name)
-					{
-						case '⬅️':
-							position.y--;
-							break;
-						case '➡️':
-							position.y++;
-							break;
-						case '⬆️':
-							position.x--;
-							break;
-						case '⬇️':
-							position.x++;
-							break;
-					}
-					
-					if(position.x > 9)
-						position.x = 0;
-					if(position.x < 0)
-						position.x = 9;
+	while(true)
+	{
+		let emoji = await grid.awaitReactions(filter, {time: 2500});
+		
+		let reaction = grid.reactions.cache.filter(r => r.emoji.name !== '❌' ).filter(r => r.count > 1);
+		reaction.forEach(
+			r =>
+			{
+				r.remove();
+				grid.react(r.emoji.name);
+			}
+		)
 
-					if(position.y > 9)
-						position.y = 0;
-					if(position.y < 0)
-						position.y = 9;
+		emoji.forEach(
+			e =>
+			{
+				if(e.emoji.name === '❌')
+				{
+					
+					grid.channel.send("Sokoban arrêté.");
+					return;
 				}
-			);
-			
-			grid.edit(renderGrid(position));
-		}
-	);
-	
-	
-	// e.users.remove(message.author.id);
+				
+				switch(e.emoji.name)
+				{
+					case '⬅️':
+						position.y--;
+						break;
+					case '➡️':
+						position.y++;
+						break;
+					case '⬆️':
+						position.x--;
+						break;
+					case '⬇️':
+						position.x++;
+						break;
+				}
+
+				if(position.x > 9)
+					position.x = 0;
+				if(position.x < 0)
+					position.x = 9;
+
+				if(position.y > 9)
+					position.y = 0;
+				if(position.y < 0)
+					position.y = 9;
+			}
+		);
+	}
 }
 
 exports.help = 
