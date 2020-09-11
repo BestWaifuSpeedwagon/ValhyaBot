@@ -7,7 +7,7 @@ const { Client, Message } = require("discord.js");
  * @param {string[]} args 
  */
  
-module.exports.run = (client, message, args) => {
+exports.run = (client, message, args) => {
     args = args.join(' ').split('  ');
     
     args.forEach(
@@ -31,7 +31,7 @@ module.exports.run = (client, message, args) => {
     )
 }
 
-module.exports.help =
+exports.help =
 {
     name: "add",
     description: "Ajouter plusieurs roles",

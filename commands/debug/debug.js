@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-module.exports.run = (client, message, args) =>
+exports.run = (client, message, args) =>
 {
 	if (!message.member.permissions.has('ADMINISTRATOR')) return message.channel.send("Vous n'êtes pas administrateur!");
 	
@@ -26,7 +26,7 @@ module.exports.run = (client, message, args) =>
 	}
 }
 
-module.exports.help = 
+exports.help = 
 {
 	name: "debug",
 	description: "Change l'état du bot",

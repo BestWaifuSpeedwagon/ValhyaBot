@@ -7,7 +7,7 @@ const { Client, Message } = require("discord.js")
  * @param {string[]} args 
  */
 
-module.exports.run = (client, message, args) =>
+exports.run = (client, message, args) =>
 {
 	let n = parseFloat(args[0]);
 	
@@ -21,7 +21,7 @@ module.exports.run = (client, message, args) =>
 	message.channel.send(`${n} est un nombre primaire !`);
 }
 
-module.exports.help = 
+exports.help = 
 {
 	name: "prime",
 	description: "Voit si un nombre est primaire",

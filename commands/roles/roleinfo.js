@@ -7,7 +7,7 @@ const { MessageEmbed, MessageAttachment, Client, Message } = require('discord.js
  * @param {string[]} args 
  */
 
-module.exports.run = (client, message, args) =>
+exports.run = (client, message, args) =>
 {
 	const role_mention = message.guild.roles.cache.find(role => role.name === args[0].toString());
 
@@ -27,7 +27,7 @@ module.exports.run = (client, message, args) =>
 	message.channel.send(embed);
 }
 
-module.exports.help =
+exports.help =
 {
 	name: "roleinfo",
 	description: "Renvoie les infos d'un role.",

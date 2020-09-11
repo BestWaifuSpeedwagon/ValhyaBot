@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 
-module.exports.run = (client, message, args) =>
+exports.run = (client, message, args) =>
 {
     const embed = new MessageEmbed()
         .setColor("#dc143c")
@@ -28,7 +28,7 @@ module.exports.run = (client, message, args) =>
     message.channel.send(embed);
 }
 
-module.exports.help =
+exports.help =
 {
     name: "embed",
     description: "Envoie un Embed.",
