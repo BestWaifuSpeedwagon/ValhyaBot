@@ -10,7 +10,7 @@ const twitch = require('../../libraries/twitch.js');
  */
 
  
-module.exports.run = async function(client, message, args)
+exports.run = async function(client, message, args)
 {
 	let _id = await twitch.getUserId(args[0]);
 	
@@ -30,7 +30,7 @@ module.exports.run = async function(client, message, args)
 	}
 }
 
-module.exports.help = 
+exports.help = 
 {
 	name: "twitch",
 	description: "Vérifie si un streamer est en ligne",

@@ -6,7 +6,7 @@ function randomDice()
     return Math.ceil(Math.random() * 6);
 }
 
-module.exports.run = (client, message, args) =>
+exports.run = (client, message, args) =>
 {
     const embed = new MessageEmbed()
         .setColor("#d54e12")
@@ -51,7 +51,7 @@ module.exports.run = (client, message, args) =>
     message.channel.send(embed);
 }
 
-module.exports.help =
+exports.help =
 {
     name: "dice",
     description: "Renvoie la valeur de plusieurs dès.",

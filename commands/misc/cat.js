@@ -25,7 +25,7 @@ function ajax_get(url, callback)
 }
 
 
-module.exports.run = function(client, message)
+exports.run = function(client, message)
 {
 	ajax_get('https://api.thecatapi.com/v1/images/search?size=full',
 		data =>
@@ -35,7 +35,7 @@ module.exports.run = function(client, message)
 	);
 }
 
-module.exports.help =
+exports.help =
 {
 	name: 'cat',
 	description: 'Envoie une image aléatoire de chat.',

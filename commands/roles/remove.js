@@ -1,4 +1,4 @@
-// module.exports = {
+// exports = {
 //     name: 'removes',
 //     description: 'Supprimer plusieurs roles',
 //     execute(client, message, args) {
@@ -18,7 +18,7 @@
 //     }
 // }
 
-module.exports.run = (client, message, args) =>
+exports.run = (client, message, args) =>
 {
     args = args.join(' ').split('  ');
 
@@ -42,7 +42,7 @@ module.exports.run = (client, message, args) =>
     );
 }
 
-module.exports.help =
+exports.help =
 {
     name: "remove",
     description: "Supprimer plusieurs roles",

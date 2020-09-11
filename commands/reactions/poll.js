@@ -8,7 +8,7 @@ const pollImage = new MessageAttachment('./assets/img/poll.png');
  * @param {Array.<string>} args 
  */
 
-module.exports.run = (client, message, args) =>
+exports.run = (client, message, args) =>
 {	
 	if(args.length > 26) return message.channel.send("Il ne peut pas il y avoir plus de 26 arguments!");
 	
@@ -130,7 +130,7 @@ module.exports.run = (client, message, args) =>
 	)*/
 }
 
-module.exports.help = 
+exports.help = 
 {
 	name: "poll",
 	description: "Créer un sondage selon les arguments donnés",
