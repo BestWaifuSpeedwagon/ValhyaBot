@@ -92,7 +92,7 @@ client.on('ready',
                 this.name = name;
                 this.id = '';
                 
-                this.online = false;
+                this.online = true;
             }
         }
         
@@ -134,7 +134,7 @@ client.on('ready',
                     {
                         if(!streamer.online) continue; //Vérifie si on le sait déjà
                         
-                        infoChannel.send(`${stream.channel.display_name} n'est plus en ligne.`);
+                        //infoChannel.send(`${stream.channel.display_name} n'est plus en ligne.`);
                         
                         streamer.online = false;
                     }
