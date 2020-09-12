@@ -55,11 +55,19 @@ client.on('message',
         {
             db[message.author.tag] = {
                 xp: 0,
-                level: 0
+                level: 1
             };
         }
         db[message.author.tag].xp++;
+        // db[message.author.tag].xp * 5 + Math.pow(1.005, db[message.author.tag].xp)
         
+        if(db[message.author.tag].xp >= db[message.author.tag].level * 10)
+        {
+            db[message.author.tag].level++;
+            db[message.author.tag].xp = 0;
+            message.author.send(`Bravo ${message.author}, tu es passé au niveau ${db[message.author.tag].level} !`);
+        }
+
         fs.writeFile("./data/database.json", JSON.stringify(db, null, 4), e => { if(e) console.log(e) });
 
         
