@@ -92,7 +92,7 @@ client.on('ready',
                 this.name = name;
                 this.id = '';
                 
-                this.online = true;
+                this.online = false;
             }
         }
         
