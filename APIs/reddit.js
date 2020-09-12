@@ -1,11 +1,11 @@
 const https = require('https');
 
-function getSubData(sub)
+function getSubData(sub, mode)
 {
 	return new Promise(
 		(resolve, reject) =>
 		{
-			https.get(`https://www.reddit.com/r/${sub}/hot.json`,
+			https.get(`https://www.reddit.com/r/${sub}/${mode}.json`,
 				res =>
 				{
 					let rawData = "";

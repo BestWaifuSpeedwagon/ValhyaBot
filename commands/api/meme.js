@@ -10,23 +10,22 @@ const reddit = require('../../APIs/reddit.js');
 
 exports.run = async function(client, message, args)
 {
-	let data = await reddit.getSubData('dankmemes');
+	//Retourne si les arguments sont faux
+	if(!['hot', 'new', 'rising'].includes(args[0])) return;
 	
-	let amount = parseInt(args[0]);
+	//Obtiens les données de reddit
+	let data = await reddit.getSubData('dankmemes', args[0]);
 	
-	for(i = 0; i < amount; i++)
-	{
-		let meme = data.data.children[i];
+	//Récupère un meme aléatoire
+	let meme = data.data.children[Math.floor(Math.random() * data.data.dist)];
+	
+	let embed = new MessageEmbed()
+		.setAuthor(meme.data.author_fullname)
+		.setTitle(meme.data.title)
+		.setImage(meme.data.url)
+		.addField("Score: ", meme.data.score)
 		
-		let embed = new MessageEmbed()
-			.setAuthor(meme.data.author_fullname)
-			.setTitle(meme.data.title)
-			.setImage(meme.data.url)
-			
-		message.channel.send(embed);
-	}
-	
-	console.log(data.data.children[0]);
+	message.channel.send(embed);
 }
 
 exports.help = 
@@ -34,5 +33,5 @@ exports.help =
 	name: "meme",
 	description: "Renvoit les top post de r/dankmemes selon le nombre donné",
 	args: true,
-	usage: "Nombre"
+	usage: "Mode(hot, new, rising)"
 }
