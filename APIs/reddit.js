@@ -2,18 +2,23 @@ const https = require('https');
 
 function getSubData(sub)
 {
-	https.get(`https://www.reddit.com/r/${sub}/hot.json`,
-		res =>
+	return new Promise(
+		(resolve, reject) =>
 		{
-			let rawData = "";
-			
-			res.on('data', chunk => rawData+=chunk);
-			
-			res.on('end',
-				() =>
+			https.get(`https://www.reddit.com/r/${sub}/hot.json`,
+				res =>
 				{
-					let parsedData = JSON.parse(rawData);
-					console.log(parsedData.data.children[0]);
+					let rawData = "";
+					
+					res.on('data', chunk => rawData+=chunk);
+					
+					res.on('end',
+						() =>
+						{
+							let parsedData = JSON.parse(rawData);
+							resolve(parsedData);
+						}
+					);
 				}
 			);
 		}
