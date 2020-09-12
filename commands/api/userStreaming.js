@@ -1,6 +1,6 @@
 const { Client, Message } = require('discord.js');
 
-const twitch = require('../../libraries/twitch.js');
+const twitch = require('../../APIs/twitch.js');
 
 /**
  * 
@@ -34,5 +34,6 @@ exports.help =
 {
 	name: "twitch",
 	description: "Vérifie si un streamer est en ligne",
-	args: true
+	args: true,
+	usage: "Nom"
 }
