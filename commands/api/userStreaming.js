@@ -1,6 +1,6 @@
 const { Client, Message } = require('discord.js');
 
-const twitch = require('../../libraries/twitch.js');
+const twitch = require('../../APIs/twitch.js');
 
 /**
  * 

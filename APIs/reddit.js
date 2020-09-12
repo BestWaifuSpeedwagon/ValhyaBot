@@ -1,8 +1,8 @@
 const https = require('https');
 
-function getSubData()
+function getSubData(sub)
 {
-	https.get('https://www.reddit.com/r/dankmemes/hot.json',
+	https.get(`https://www.reddit.com/r/${sub}/hot.json`,
 		res =>
 		{
 			let rawData = "";

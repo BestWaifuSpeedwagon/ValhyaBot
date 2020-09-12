@@ -143,6 +143,7 @@ client.on('ready',
                         if(streamer.online) continue; //Vérifie si on le sait déjà
                         
                         //Envoie un embed
+                        infoChannel.send('@here');
                         infoChannel.send(twitch.twitchEmbed(stream.channel.display_name, stream));
                         
                         streamer.online = true;
