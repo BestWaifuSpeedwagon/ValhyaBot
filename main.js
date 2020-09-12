@@ -8,7 +8,6 @@ const config =
     twitchID: process.env.twitchID
 }
 
-
 const { Client, Collection, ClientApplication, TextChannel } = require('discord.js');
 const fs = require('fs');
 const { help } = require('./commands/reactions/poll');
@@ -61,7 +60,7 @@ client.on('message',
         }
         db[message.author.tag].xp++;
         
-        fs.writeFile("data/database.json", JSON.stringify(db, null, 4), console.error);
+        fs.writeFile("./data/database.json", JSON.stringify(db, null, 4), e => { if(e) console.log(e) });
 
         
         if(!message.content.startsWith(config.PREFIX)) return;
@@ -116,7 +115,7 @@ client.on('ready',
         [
             new Streamer('Valhyan'    ),
             new Streamer('Thalounette'),
-            new Streamer('delphes99'  ),
+            new Streamer('Delphes99'  ),
             new Streamer('neight___'  ),
             new Streamer('thomasc2607')
         ];

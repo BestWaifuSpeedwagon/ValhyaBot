@@ -13,16 +13,17 @@ let database = require('../../data/database.json');
 exports.run = (client, message, args) =>
 {
     //Transforme tout les argument en minuscules
-    args.forEach(a => a = a.toLowerCase());
+    args = args.join(' ').toLowerCase().split(' ');
     
     /** @type {Collection.<string, GuildMember>} */
     let user_mention;
     
     if(args.length > 0)
     {
-        //let roles = message.guild.roles.cache.filter(r => r.name === )
+        let roles = message.guild.roles.cache.filter(r => args.includes(r.name.toLowerCase()));
         
-        user_mention = message.guild.members.cache.filter(m => args.includes(m.user.username.toLowerCase()));
+        user_mention = message.guild.members.cache.filter(m => m.presence.status !== 'offline' && (args.includes(m.user.username.toString().toLowerCase()) || m.roles.cache.array().includes(roles.first())));
+
     }
     else return;
     
@@ -37,7 +38,7 @@ exports.run = (client, message, args) =>
                     level: 0
                 };
             }
-            fs.writeFile("../../data/database.json", JSON.stringify(database, null, 4), console.log);
+            fs.writeFile("./data/database.json", JSON.stringify(database, null, 4), e => {if(e) console.log(e)});
             
             if(database[user.user.tag] === undefined) return;
             
