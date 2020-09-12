@@ -12,6 +12,7 @@ const config =
 const { Client, Collection, ClientApplication, TextChannel } = require('discord.js');
 const fs = require('fs');
 const { help } = require('./commands/reactions/poll');
+let db = JSON.parse(fs.readFileSync("./database.json", "utf-8"));
 
 const client = new Client();
 client.commands = new Collection();
@@ -49,7 +50,26 @@ loadCommands();
 client.on('message',
     message => 
     {
-        if(!message.content.startsWith(config.PREFIX) || message.author.bot) return;
+        if (message.author.bot) return;
+
+        if (!db[message.author.tag]) 
+        {
+            db[message.author.tag] = {
+                xp: 0,
+                level: 0
+            };
+            console.log(db[message.author.tag]);
+        }
+        db[message.author.tag].xp++;
+
+
+        fs.writeFile("./database.json", JSON.stringify(db, null, 4), (x) =>
+        {
+            if (x) console.error(x)
+        });
+
+        if(!message.content.startsWith(config.PREFIX)) return;
+
         
         const args = message.content.slice(config.PREFIX.length).split(/ +/);
         const commandName = args.shift().toLowerCase();
