@@ -1,4 +1,2 @@
 # ValhyaBot
-This bot was made by following the getCodingKnowledge tutorial on Youtube.
-
-The Tutorial : https://cutt.ly/WfgBnC0
+Bot créer pour le serveur discord du streamer Valhyan en javascript et nodejs.
