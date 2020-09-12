@@ -1,5 +1,7 @@
-const { MessageEmbed, Client, Message } = require("discord.js");
-const database = require('../../data/database.json');
+const { MessageEmbed, Client, Message, GuildMember, Collection } = require("discord.js");
+const fs = require('fs');
+
+let database = require('../../data/database.json');
 
 /**
  * 
@@ -13,35 +15,45 @@ exports.run = (client, message, args) =>
     //Transforme tout les argument en minuscules
     args.forEach(a => a = a.toLowerCase());
     
-    //Obtiens tous les membre dans les arguments
-    const user_mention = message.guild.members.cache.filter(m => args.includes(m.nickname.toLowerCase()));
+    /** @type {Collection.<string, GuildMember>} */
+    let user_mention;
     
-
+    if(args.length > 0)
+    {
+        //let roles = message.guild.roles.cache.filter(r => r.name === )
+        
+        user_mention = message.guild.members.cache.filter(m => args.includes(m.user.username.toLowerCase()));
+    }
+    else return;
+    
+    
     user_mention.forEach(
         user =>
         {
+            if(!database[user.user.tag]) 
+            {
+                database[user.user.tag] = {
+                    xp: 0,
+                    level: 0
+                };
+            }
+            fs.writeFile("../../data/database.json", JSON.stringify(database, null, 4), console.log);
+            
+            if(database[user.user.tag] === undefined) return;
+            
             let embed = new MessageEmbed()
                 .setColor('#008000')
-                .setTitle(`Informations sur ${user.nickname} !`)
-                .setThumbnail('https://cdn.discordapp.com/attachments/744622330117881926/754289447352139806/FO2p50F7Nf4AAAAASUVORK5CYII.png')
+                .setTitle(`Informations sur ${user.user.username} !`)
+                .setThumbnail(user.user.avatarURL())
                 .setURL('https://github.com/BestWaifuSpeedwagon/ValhyaBot')
             
-            embed.addField('Niveau: ', `${user.user.username}`)
+            embed.addField('Niveau: ', `${database[user.user.tag].level}`);
+            embed.addField('Experience: ', `${database[user.user.tag].xp}`);
+            
+            message.channel.send(embed);
         }
         
     );
-    
-    
-        // .addFields(
-        //     {
-        //         name: 'Niveau :',
-        //         value: `[niveau]`
-        //     }
-        // )
-
-    message.channel.send(embed);
-    
-    
 };
 
 exports.help =

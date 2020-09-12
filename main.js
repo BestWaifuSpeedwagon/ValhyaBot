@@ -12,7 +12,7 @@ const config =
 const { Client, Collection, ClientApplication, TextChannel } = require('discord.js');
 const fs = require('fs');
 const { help } = require('./commands/reactions/poll');
-let db = JSON.parse(fs.readFileSync("./database.json", "utf-8"));
+let db = JSON.parse(fs.readFileSync("data/database.json", "utf-8"));
 
 const client = new Client();
 client.commands = new Collection();
@@ -58,16 +58,12 @@ client.on('message',
                 xp: 0,
                 level: 0
             };
-            console.log(db[message.author.tag]);
         }
         db[message.author.tag].xp++;
+        
+        fs.writeFile("data/database.json", JSON.stringify(db, null, 4), console.error);
 
-
-        fs.writeFile("./database.json", JSON.stringify(db, null, 4), (x) =>
-        {
-            if (x) console.error(x)
-        });
-
+        
         if(!message.content.startsWith(config.PREFIX)) return;
 
         
