@@ -50,7 +50,7 @@ client.on('message',
     message => 
     {
         if (message.author.bot) return;
-
+        
         if (!db[message.author.tag]) 
         {
             db[message.author.tag] = {
@@ -65,7 +65,7 @@ client.on('message',
         {
             db[message.author.tag].level++;
             db[message.author.tag].xp = 0;
-            message.author.send(`Bravo ${message.author}, tu es passé au niveau ${db[message.author.tag].level} !`);
+            message.author.send(`Bravo ${message.author}, tu es passé au niveau ${db[message.author.tag].level} !\nCeci est envoyé automatiquement, pour désactiver les notification, faîtes \`!vbot notification\``);
         }
 
         fs.writeFile("./data/database.json", JSON.stringify(db, null, 4), e => { if(e) console.log(e) });
