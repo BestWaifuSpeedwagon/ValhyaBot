@@ -11,7 +11,6 @@ const config =
 const { Client, Collection, ClientApplication, TextChannel } = require('discord.js');
 const fs = require('fs');
 const { help } = require('./commands/reactions/poll');
-let db = JSON.parse(fs.readFileSync("data/database.json", "utf-8"));
 
 const client = new Client();
 client.commands = new Collection();
@@ -46,41 +45,78 @@ function loadCommands(dir = __dirname + "/commands/")
 
 loadCommands();
 
+//#region Classes
+
+class Streamer
+{
+    constructor(name)
+    {
+        this.name = name;
+        this.id = '';
+
+        this.online = true;
+    }
+}
+
+//#endregion
+
+//Définis "l'objet" utilisé dans le json
+/**
+ * @typedef {Object} UserLevel
+ * @property {number} xp
+ * @property {number} level
+ * @property {number} requiredXp
+ * @property {boolean} notification
+ */
+
+/** @type {Object.<string, UserLevel>} */
+let db = JSON.parse(fs.readFileSync("data/database.json", "utf-8"));
+
 client.on('message',
     message => 
     {
-        if (message.author.bot) return;
-        
-        if (!db[message.author.tag]) 
+        if(message.author.bot) return;
+        if(!db[message.author.tag]) 
         {
-            db[message.author.tag] = {
-                xp: 0,
-                level: 1
-            };
+            db[message.author.tag] = 
+            {
+                "xp": 0,
+                "level": 1,
+                "requiredXp": 5,
+                "notification": true
+            }
         }
-        db[message.author.tag].xp++;
-        // db[message.author.tag].xp * 5 + Math.pow(1.005, db[message.author.tag].xp)
         
-        if(db[message.author.tag].xp >= db[message.author.tag].level * 10)
+        let userlevel = db[message.author.tag];
+        
+        userlevel.xp++;
+        if(userlevel.xp >= userlevel.requiredXp)
         {
-            db[message.author.tag].level++;
-            db[message.author.tag].xp = 0;
-            message.author.send(`Bravo ${message.author}, tu es passé au niveau ${db[message.author.tag].level} !\nCeci est envoyé automatiquement, pour désactiver les notification, faîtes \`!vbot notification\``);
-        }
+            userlevel.level++;
+            userlevel.xp = 0;
+            
+            //Redéfini le niveau d'xp requis
+            userlevel.requiredXp = userlevel.level * 5 + Math.pow(1.005, userlevel.level);
 
+            message.author.send(`Bravo ${message.author}, tu es passé au niveau ${userlevel.level} !\nCeci est envoyé automatiquement, pour désactiver les notification, fait \`!vbot notification\``);
+        }
+        
+        //Ecris les nouvelles valeurs dans un json.
         fs.writeFile("./data/database.json", JSON.stringify(db, null, 4), e => { if(e) console.log(e) });
 
+        
         
         if(!message.content.startsWith(config.PREFIX)) return;
 
         
         const args = message.content.slice(config.PREFIX.length).split(/ +/);
+        
         const commandName = args.shift().toLowerCase();
-
+        
         if (!client.commands.has(commandName)) return;
         const command = client.commands.get(commandName);
 
-        if (command.help.args && !args.length)
+        if (command.help.args === true && !args.length)
         {
             let noArgsReply = `Il faut des arguments pour cette commande, ${message.author}`;
 
@@ -108,16 +144,6 @@ client.on('ready',
         ///Vérifie le stream toutes les minutes
         
         //Créer tout les streamers
-        class Streamer
-        {
-            constructor(name)
-            {
-                this.name = name;
-                this.id = '';
-                
-                this.online = true;
-            }
-        }
         
         let streamers =
         [

@@ -1,6 +1,16 @@
 const { MessageEmbed, Client, Message, GuildMember, Collection } = require("discord.js");
 const fs = require('fs');
 
+
+/**
+ * @typedef {Object} UserLevel
+ * @property {number} xp
+ * @property {number} level
+ * @property {number} requiredXp
+ * @property {boolean} notification
+ */
+
+/** @type {Object.<string, UserLevel} */
 let database = require('../../data/database.json');
 
 /**
@@ -12,38 +22,45 @@ let database = require('../../data/database.json');
 
 exports.run = (client, message, args) =>
 {
-    //Transforme tout les argument en minuscules
-    args = args.join(' ').toLowerCase().split(' ');
-    
+    //Assigne user_mention au type voulu
     /** @type {Collection.<string, GuildMember>} */
     let user_mention;
     
     if(args.length > 0)
     {
+        //Transforme tout les argument en minuscules
+        args = args.join(' ').toLowerCase().split(' ');
+        
+        //Extrai les rôles dans les arguments
         let roles = message.guild.roles.cache.filter(r => args.includes(r.name.toLowerCase()));
         
+        //Vérifie que l'utilisateur est en ligne, puis que son pseudo ou rôle est dans les arguments
         user_mention = message.guild.members.cache.filter(m => m.presence.status !== 'offline' && (args.includes(m.user.username.toString().toLowerCase()) || m.roles.cache.array().includes(roles.first())));
-
     }
     else
     {
-        user_mention = message.guild.members.cache.find(m => m.user.id === message.author.id);
+        //Si aucun argument n'est donné
+        user_mention = message.guild.members.cache.filter(m => m.user.id === message.author.id);
     };
     
     
     user_mention.forEach(
         user =>
         {
-            if(!database[user.user.tag]) 
-            {
-                database[user.user.tag] = {
-                    xp: 0,
-                    level: 1
-                };
-            }
-            fs.writeFile("./data/database.json", JSON.stringify(database, null, 4), e => {if(e) console.log(e)});
+            if(user.user.bot) return;
             
-            if(database[user.user.tag] === undefined) return;
+            if(!database[user.user.tag])
+            {
+                database[user.user.tag] =
+                {
+                    "xp": 0,
+                    "level": 1,
+                    "requiredXp": 5,
+                    "notification": true
+                }
+                //Ecris la nouvelle personne dans le .json
+                fs.writeFile("./data/database.json", JSON.stringify(db, null, 4), e => { if(e) console.log(e) });
+            }
             
             let embed = new MessageEmbed()
                 .setColor('#008000')
@@ -65,5 +82,5 @@ exports.help =
     name: "userinfo",
     description: "Renvoie les information d'un utilisateur mentionné.",
     usage: "<utilisateur mentionné>",
-    args: true,
+    args: 1, //Peut et ne peux pas avoir d'arguments
 };

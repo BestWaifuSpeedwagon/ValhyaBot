@@ -1,10 +1,14 @@
 {
-    "Kamagyu#1421": {
-        "xp": 3,
-        "level": 2
-    },
     "davawen#6423": {
-        "xp": 1,
-        "level": 1
+        "xp": 15,
+        "level": 3,
+        "requiredXp": 16.015075125,
+        "notification": true
+    },
+    "Kamagyu#1421": {
+        "xp": 9,
+        "level": 2,
+        "requiredXp": 11.010024999999999,
+        "notification": true
     }
 }
