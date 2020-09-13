@@ -25,7 +25,10 @@ exports.run = (client, message, args) =>
         user_mention = message.guild.members.cache.filter(m => m.presence.status !== 'offline' && (args.includes(m.user.username.toString().toLowerCase()) || m.roles.cache.array().includes(roles.first())));
 
     }
-    else return;
+    else
+    {
+        user_mention = message.guild.members.cache.find(m => m.user.id === message.author.id);
+    };
     
     
     user_mention.forEach(
@@ -35,7 +38,7 @@ exports.run = (client, message, args) =>
             {
                 database[user.user.tag] = {
                     xp: 0,
-                    level: 0
+                    level: 1
                 };
             }
             fs.writeFile("./data/database.json", JSON.stringify(database, null, 4), e => {if(e) console.log(e)});
