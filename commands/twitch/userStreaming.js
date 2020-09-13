@@ -34,5 +34,6 @@ exports.help =
 {
 	name: "twitch",
 	description: "Vérifie si un streamer est en ligne",
-	args: true
+	args: true,
+	usage: "<nom>"
 }

@@ -103,13 +103,15 @@ function getUserStream(id)
 
 function twitchEmbed(name, stream)
 {
+	console.log(stream);
+	
 	let embed = new MessageEmbed()
 		.setColor("#d54e12")
 		.setTitle(`${name} est en stream!`)
 		.setImage(stream.preview.large)
 
-	embed.addField('Jeu: ', stream.game);
-	embed.addField(name.toLowerCase() === 'valhyan' ? 'Venez voir le roi du choo choo' : 'Lien du stream', `https://www.twitch.tv/${name}`);
+	embed.addField('Jeu: ', stream.game, false);
+	embed.addField(name.toLowerCase() === 'valhyan' ? 'Venez voir le roi du choo choo' : 'Lien du stream', `https://www.twitch.tv/${name}`, false);
 	
 	return embed;
 }

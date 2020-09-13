@@ -1,14 +1,26 @@
 {
     "davawen#6423": {
-        "xp": 15,
-        "level": 3,
-        "requiredXp": 16.015075125,
+        "xp": 1,
+        "level": 4,
+        "requiredXp": 21.020150500625,
+        "notification": true
+    },
+    "Scramble#4198": {
+        "xp": 4,
+        "level": 1,
+        "requiredXp": 5,
         "notification": true
     },
     "Kamagyu#1421": {
-        "xp": 9,
+        "xp": 7,
         "level": 2,
         "requiredXp": 11.010024999999999,
+        "notification": true
+    },
+    "Thalounette#8636": {
+        "xp": 1,
+        "level": 1,
+        "requiredXp": 5,
         "notification": true
     }
 }
