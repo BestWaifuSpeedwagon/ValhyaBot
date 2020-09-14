@@ -20,7 +20,7 @@ exports.run = function(client, message, args, database)
 {
 	database[message.author.tag].notification = !database[message.author.tag].notification;
 	
-	message.channel.send('Vos notifications ont étés désactivées!');
+	message.channel.send(`Vos notifications ont étés ${database[message.author.tag].notification ? 'activées' : 'désactivées'}!`);
 	
 	fs.writeFile("./data/database.json", JSON.stringify(database, null, 4), e => { if(e) console.log(e) });
 }

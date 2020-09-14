@@ -1,4 +1,4 @@
-const { MessageEmbed, Client, Message, GuildMember, Collection } = require("discord.js");
+const { MessageEmbed, Client, Message, GuildMember, Collection, Guild } = require("discord.js");
 const fs = require('fs');
 
 /**
@@ -19,6 +19,9 @@ const fs = require('fs');
 
 exports.run = function(client, message, args, database)
 {
+    //Vérifie que la guild existe
+    if(!message.guild) return message.channel.send(`Votre guilde n'existe pas!`);
+    
     //Assigne user_mention au type voulu
     /** @type {Collection.<string, GuildMember>} */
     let user_mention;
@@ -29,10 +32,10 @@ exports.run = function(client, message, args, database)
         args = args.join(' ').toLowerCase().split(' ');
 
         //Extrai les rôles dans les arguments
-        let roles = message.guild.roles.cache.filter(r => args.includes(r.name.toLowerCase()));
+        let roles = message.guild.roles.cache.filter(r => args.includes(r.name.toLowerCase())).array();
 
         //Vérifie que l'utilisateur est en ligne, puis que son pseudo ou rôle est dans les arguments
-        user_mention = message.guild.members.cache.filter(m => m.presence.status !== 'offline' && (args.includes(m.user.username.toString().toLowerCase()) || m.roles.cache.array().includes(roles.first())));
+        user_mention = message.guild.members.cache.filter(m => m.presence.status !== 'offline' && (args.includes(m.user.username.toString().toLowerCase()) || m.roles.cache.array().some(r => roles.includes(r))));
     }
     else
     {

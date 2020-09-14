@@ -1,8 +1,8 @@
 {
     "davawen#6423": {
-        "xp": 4,
-        "level": 4,
-        "requiredXp": 21.020150500625,
+        "xp": 3,
+        "level": 6,
+        "requiredXp": 31.030377509393766,
         "notification": false
     },
     "Scramble#4198": {
@@ -18,6 +18,18 @@
         "notification": true
     },
     "Thalounette#8636": {
+        "xp": 1,
+        "level": 1,
+        "requiredXp": 5,
+        "notification": true
+    },
+    "Tauttore#4200": {
+        "xp": 2,
+        "level": 1,
+        "requiredXp": 5,
+        "notification": true
+    },
+    "Valhyan#0155": {
         "xp": 1,
         "level": 1,
         "requiredXp": 5,
