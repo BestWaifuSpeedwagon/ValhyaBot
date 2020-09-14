@@ -1,9 +1,9 @@
 {
     "davawen#6423": {
-        "xp": 3,
+        "xp": 4,
         "level": 4,
         "requiredXp": 21.020150500625,
-        "notification": true
+        "notification": false
     },
     "Scramble#4198": {
         "xp": 4,
