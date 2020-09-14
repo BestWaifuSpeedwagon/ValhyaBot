@@ -85,11 +85,11 @@ client.on('message',
         
         let userlevel = db[message.author.tag];
         
-        userlevel.xp++;
+        userlevel.xp += message.content.length/3;
         if(userlevel.xp >= userlevel.requiredXp)
         {
             userlevel.level++;
-            userlevel.xp = 0;
+            userlevel.xp = userlevel.requiredXp - userlevel.xp;
             
             //Redéfini le niveau d'xp requis
             userlevel.requiredXp = userlevel.level * 5 + Math.pow(1.005, userlevel.level);

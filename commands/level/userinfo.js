@@ -72,7 +72,7 @@ exports.run = function(client, message, args, database)
                 .setURL('https://github.com/BestWaifuSpeedwagon/ValhyaBot')
 
             embed.addField('Niveau: ', `${database[user.tag].level}`, true);
-            embed.addField('Experience: ', `${database[user.tag].xp}`, true);
+            embed.addField('Experience: ', `${Math.round(database[user.tag].xp)}`, true);
             embed.addField('Prochain niveau: ', `${Math.ceil(database[user.tag].requiredXp)}`, true);
 
             message.channel.send(embed);
