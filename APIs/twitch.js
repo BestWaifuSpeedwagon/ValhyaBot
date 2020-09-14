@@ -103,8 +103,6 @@ function getUserStream(id)
 
 function twitchEmbed(name, stream)
 {
-	console.log(stream);
-	
 	let embed = new MessageEmbed()
 		.setColor("#d54e12")
 		.setTitle(`${name} est en stream!`)

@@ -28,13 +28,14 @@ exports.run = function(client, message, args)
 		
 		args.shift();
 		
-		let index = 0;
-		for(let arg of args)
-		{
-			embed.addField(arg, regionalIndicators[index]);
+		args.forEach(
+			(arg, index) =>
+			{
+				embed.addField(arg, regionalIndicators[index]);
 
-			index++;
-		}
+				index++;
+			}
+		);
 
 		message.channel.send(embed).then(
 			msg =>

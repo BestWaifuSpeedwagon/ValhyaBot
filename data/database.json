@@ -1,8 +1,8 @@
 {
     "davawen#6423": {
-        "xp": 28.333333333333332,
-        "level": 8,
-        "requiredXp": 41.04070704392544,
+        "xp": 46.681366578733204,
+        "level": 23,
+        "requiredXp": 116.12155201612477,
         "notification": false
     },
     "Kamagyu#1421": {
@@ -108,9 +108,9 @@
         "notification": true
     },
     "Scramble#4198": {
-        "xp": 4,
-        "level": 2,
-        "requiredXp": 11.010024999999999,
+        "xp": 158.81986823971766,
+        "level": 68,
+        "requiredXp": 341.403757854958,
         "notification": true
     },
     "PleoomaX#4309": {
