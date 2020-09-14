@@ -2,26 +2,21 @@ const fs = require('fs');
 
 exports.run = (client, message, args) =>
 {
-	if (!message.member.permissions.has('ADMINISTRATOR')) return message.channel.send("Vous n'êtes pas administrateur!");
-	
 	switch(args[0])
 	{
 		case 'setStatus':
 			let str = "";
-			for(i = 1; i < args.length; i++)
+			for(i = 2; i < args.length; i++)
 			{
 				str += args[i] + " ";
 			}	
 			str = str.substr(0, str.length-1);
 			
 			client.user.setActivity(`${str}`);
-			message.channel.send(`Changé l'état à ${str} !`);
-			break;
-		case 'setStream':
-			client.user.setActivity(`${client.user.presence.activities[0].name}`, { type: "STREAMING", url: args[1] });
+			message.channel.send(`Changé l'état à ${str} !`, {type: args[1]});
 			break;
 		default:
-			message.channel.send("Liste de commandes disponibles: \n- \`setStatus\` \n- \`setStream\`");
+			message.channel.send("Liste de commandes disponibles: \n- \`setStatus <PLAYING | LISTENING> <status>\`");
 			break;
 	}
 }
@@ -30,6 +25,6 @@ exports.help =
 {
 	name: "debug",
 	description: "Change l'état du bot",
-	usage: "<argument>",
-	args: true
+	usage: "",
+	args: 1
 }

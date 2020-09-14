@@ -8,77 +8,56 @@ const pollImage = new MessageAttachment('./assets/img/poll.png');
  * @param {Array.<string>} args 
  */
 
-exports.run = (client, message, args) =>
+exports.run = function(client, message, args)
 {	
+	args = args.join(' ').split('\"');
+	args = args.filter(v => v!='');
+	args = args.filter(v => v!=' ');
+	
 	if(args.length > 26) return message.channel.send("Il ne peut pas il y avoir plus de 26 arguments!");
 	
-	args = args.join(' ').split('\"');
-	args = args.filter(v=>v!='');
-	args = args.filter(v=>v!=' ');
-	
-	let regionalIndicators = 
-	[
-		"🇦",
-		"🇧",
-		"🇨",
-		"🇩",
-		"🇪",
-		"🇫",
-		"🇬",
-		"🇭",
-		"🇮",
-		"🇯",
-		"🇰",
-		"🇱",
-		"🇲",
-		"🇳",
-		"🇴",
-		"🇵",
-		"🇶",
-		"🇷",
-		"🇸",
-		"🇹",
-		"🇺",
-		"🇻",
-		"🇼",
-		"🇽",
-		"🇾",
-		"🇿",
-	]
-	
-	let embed = new MessageEmbed()
-		.setColor("#d54e12")
-		.setTitle(args[0])
-		.attachFiles(pollImage)
-		.setThumbnail('attachment://poll.png');
-	
-	args.shift();
-	
-	let index = 0;
-	for(arg of args)
+	if(args.length > 1)
 	{
-		embed.addFields(
+		let regionalIndicators = ["🇦", "🇧", "🇨", "🇩", "🇪", "🇫", "🇬", "🇭", "🇮", "🇯", "🇰", "🇱", "🇲", "🇳", "🇴", "🇵", "🇶", "🇷", "🇸", "🇹", "🇺", "🇻", "🇼", "🇽", "🇾", "🇿"];
+		
+		let embed = new MessageEmbed()
+			.setColor("#d54e12")
+			.setTitle(args[0])
+			.attachFiles(pollImage)
+			.setThumbnail('attachment://poll.png');
+		
+		args.shift();
+		
+		let index = 0;
+		for(let arg of args)
+		{
+			embed.addField(arg, regionalIndicators[index]);
+
+			index++;
+		}
+
+		message.channel.send(embed).then(
+			msg =>
 			{
-				name: arg,
-				value: regionalIndicators[index],
-				inline: false
+				let index = 0;
+				for(arg of args)
+				{
+					msg.react(regionalIndicators[index]);
+					index++;
+				}
+			}
+		);
+	}
+	else
+	{
+		message.channel.send(`📊 ${args[0]}`).then(
+			msg =>
+			{
+				msg.react('👍');
+				msg.react('👎');
 			}
 		)
-		
-		index++;
 	}
-	
-	message.channel.send(embed).then(
-		msg =>
-		{
-			let index = 0;
-			for(arg of args)
-			{
-				msg.react(regionalIndicators[index]);
-				index++;
-			}
-		}
-	);
 	
 	//Pour apprendre les collecteurs de reaction
 	//Pourrait permettre de faire des jeux
@@ -134,5 +113,6 @@ exports.help =
 {
 	name: "poll",
 	description: "Créer un sondage selon les arguments donnés",
-	args: true
+	args: true,
+	usage: `<"question"> <"choix1"> <"choix2"> <"etc...">`
 }
