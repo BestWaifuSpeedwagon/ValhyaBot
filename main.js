@@ -17,8 +17,7 @@ const client = new Client();
 
 client.commands = new Collection();
 
-
-const twitch = require('./libraries/twitch.js');
+const twitch = require('./APIs/twitch.js');
 const { setInterval, setTimeout } = require('timers');
 
 /**
