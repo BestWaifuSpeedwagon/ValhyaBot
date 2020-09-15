@@ -1,8 +1,8 @@
 {
     "davawen#6423": {
-        "xp": 46.681366578733204,
-        "level": 23,
-        "requiredXp": 116.12155201612477,
+        "xp": 28.559814562608434,
+        "level": 24,
+        "requiredXp": 121.12715977620539,
         "notification": false
     },
     "Kamagyu#1421": {
@@ -12,10 +12,10 @@
         "notification": true
     },
     "Elunnor#4401": {
-        "xp": 1,
-        "level": 1,
-        "requiredXp": 5,
-        "notification": true
+        "xp": 12.333333333333334,
+        "level": 5,
+        "requiredXp": 26.025251253128125,
+        "notification": false
     },
     "Hinatomi#7223": {
         "xp": 0,
@@ -66,9 +66,9 @@
         "notification": true
     },
     "Delphes#5443": {
-        "xp": 0,
-        "level": 1,
-        "requiredXp": 5,
+        "xp": 14,
+        "level": 3,
+        "requiredXp": 16.015075125,
         "notification": true
     },
     "Vivalinux#9365": {

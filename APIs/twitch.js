@@ -101,7 +101,7 @@ function getUserStream(id)
  * @param {object} stream 
  */
 
-function twitchEmbed(name, stream)
+function twitchEmbed(name, message, stream)
 {
 	let embed = new MessageEmbed()
 		.setColor("#d54e12")
@@ -109,7 +109,7 @@ function twitchEmbed(name, stream)
 		.setImage(stream.preview.large)
 
 	embed.addField('Jeu: ', stream.game, false);
-	embed.addField(name.toLowerCase() === 'valhyan' ? 'Venez voir le roi du choo choo' : 'Lien du stream', `https://www.twitch.tv/${name}`, false);
+	embed.addField(message, `https://www.twitch.tv/${name}`, false);
 	
 	return embed;
 }

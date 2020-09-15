@@ -172,7 +172,7 @@ client.on('ready',
                 this.name = name;
                 this.id = '';
 
-                this.online = true;
+                this.online = false;
             }
         }
         
@@ -195,14 +195,18 @@ client.on('ready',
                 s.id = _id;
             }
         );
-        
-        //Obtenir id du salon info / bot-test
-
-        /** @type {TextChannel} */
-        let infoChannel = client.guilds.cache.find(g => g.name === "Valhyan").channels.cache.find(c => c.id === "696064128934215710");
-        // let infoChannel = client.guilds.cache.find(g => g.name === "Land of JS").channels.cache.find(c => c.name === "bot-test");
-        
-        
+		
+        //Obtenir id des salons info
+        /** @type {Collection.<string, TextChannel>} */
+        let channelCache = client.guilds.cache.find(g => g.name === "Valhyan").channels.cache;
+		
+        /** @type {TextChannel[]} */
+        let channels = 
+        [
+			channelCache.find(c => c.name === "les-autres-streams"),
+			channelCache.find(c => c.id === "696064128934215710")
+        ]
+		
         setInterval(
             async () =>
             {
@@ -214,8 +218,6 @@ client.on('ready',
                     {
                         if(!streamer.online) continue; //Vérifie si on le sait déjà
                         
-                        //infoChannel.send(`${stream.channel.display_name} n'est plus en ligne.`);
-                        
                         streamer.online = false;
                     }
                     else //Stream en cours
@@ -223,7 +225,21 @@ client.on('ready',
                         if(streamer.online) continue; //Vérifie si on le sait déjà
                         
                         //Envoie un embed
-                        infoChannel.send(twitch.twitchEmbed(stream.channel.display_name, stream));
+						let channel = 0;
+						let message = "Lien du stream";
+						
+                        switch(streamer.name)
+                        {
+                            case 'Valhyan':
+								channel = 1;
+								message = "Venez voir le roi du Choo Choo!";
+								break;
+							case 'Delphes99':
+								message = "Le maitre du kotlin!";
+								break;
+						}
+						
+						channels[channel].send(twitch.twitchEmbed(streamer.name, message, stream));
                         
                         streamer.online = true;
                     }
