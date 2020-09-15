@@ -25,7 +25,7 @@ exports.run = async function(client, message, args)
 			message.channel.send(`${args[0]} n'est pas en ligne!`);
 			break;
 		default:
-			message.channel.send(twitch.twitchEmbed(args[0], stream));
+			message.channel.send(twitch.twitchEmbed(args[0], "Lien du stream", stream));
 			break;
 	}
 }
