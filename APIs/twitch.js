@@ -6,7 +6,7 @@ const config =
 }
 
 const https = require('https');
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, MessageAttachment } = require('discord.js');
 
 /**
  * 
@@ -106,8 +106,8 @@ function twitchEmbed(name, message, stream)
 	let embed = new MessageEmbed()
 		.setColor("#d54e12")
 		.setTitle(`${name} est en stream!`)
-		.setImage(stream.preview.large)
-
+		.setImage(stream.preview.template)
+	
 	embed.addField('Jeu: ', stream.game, false);
 	embed.addField(message, `https://www.twitch.tv/${name}`, false);
 	
