@@ -17,7 +17,6 @@ const client = new Client();
 
 client.commands = new Collection();
 
-const twitch = require('./APIs/twitch.js');
 const { setInterval, setTimeout } = require('timers');
 
 /**
@@ -150,6 +149,8 @@ client.on('message',
     }
 );
 
+let {Streamer, getUserId, getUserStream, twitchEmbed} = require('./APIs/twitch.js');
+
 client.on('ready',
     async () =>
     {
@@ -165,16 +166,7 @@ client.on('ready',
         
         //Créer tout les streamers
         
-        class Streamer
-        {
-            constructor(name)
-            {
-                this.name = name;
-                this.id = '';
-
-                this.online = false;
-            }
-        }
+        
         
         let streamers =
         [
@@ -190,7 +182,7 @@ client.on('ready',
         streamers.forEach(
             async s => 
             {
-                let _id = await twitch.getUserId(s.name);
+                let _id = await getUserId(s.name);
                 
                 s.id = _id;
             }
@@ -212,7 +204,7 @@ client.on('ready',
             {
                 for(let streamer of streamers)
                 {
-                    let stream = await twitch.getUserStream(streamer.id);
+                    let stream = await getUserStream(streamer.id);
                     
                     if(stream === null) //Pas de stream en cours
                     {
@@ -239,7 +231,7 @@ client.on('ready',
 								break;
 						}
 						
-						channels[channel].send(twitch.twitchEmbed(streamer.name, message, stream));
+						channels[channel].send(twitchEmbed(streamer.name, message, stream));
                         
                         streamer.online = true;
                     }

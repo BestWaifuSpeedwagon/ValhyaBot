@@ -114,6 +114,18 @@ function twitchEmbed(name, message, stream)
 	return embed;
 }
 
+class Streamer
+{
+	constructor(name)
+	{
+		this.name = name;
+		this.id = '';
+
+		this.online = false;
+	}
+}
+
 exports.getUserId = getUserId;
 exports.getUserStream = getUserStream;
 exports.twitchEmbed = twitchEmbed;
+exports.Streamer = Streamer;
