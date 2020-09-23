@@ -1,8 +1,8 @@
 {
     "davawen#6423": {
-        "xp": 28.559814562608434,
-        "level": 24,
-        "requiredXp": 121.12715977620539,
+        "xp": 40.43265478640305,
+        "level": 25,
+        "requiredXp": 126.13279557508642,
         "notification": false
     },
     "Kamagyu#1421": {
@@ -189,6 +189,18 @@
         "xp": 0,
         "level": 1,
         "requiredXp": 5,
+        "notification": true
+    },
+    "Sasu#0101": {
+        "xp": 26.308082080205214,
+        "level": 6,
+        "requiredXp": 31.030377509393766,
+        "notification": false
+    },
+    "geleto oceane#8512": {
+        "xp": 8.989975000000001,
+        "level": 3,
+        "requiredXp": 16.015075125,
         "notification": true
     }
 }

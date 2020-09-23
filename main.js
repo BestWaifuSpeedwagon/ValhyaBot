@@ -66,9 +66,24 @@ loadCommands();
 /** @type {Object.<string, UserLevel>} */
 let db = JSON.parse(fs.readFileSync("data/database.json", "utf-8"));
 
+//Charge les commandes twitch
+const { Streamer, getUserId, getUserStream, twitchEmbed } = require('./APIs/twitch.js');
+
+//Créer tout les streamers
+let streamers =
+[
+	new Streamer('Valhyan'),
+	new Streamer('Thalounette'),
+	new Streamer('Delphes99'),
+	new Streamer('neight___'),
+	new Streamer('thomasc2607')
+];
+
 client.on('message',
     message => 
     {
+		//#region Niveau / xp
+		
         if(message.author.bot) return;
         if(!db[message.author.tag]) 
         {
@@ -77,7 +92,7 @@ client.on('message',
                 "xp": 0,
                 "level": 1,
                 "requiredXp": 5,
-                "notification": true
+                "notification": false
             }
         }
         
@@ -105,10 +120,10 @@ client.on('message',
         //Ecris les nouvelles valeurs dans un json.
         fs.writeFile("./data/database.json", JSON.stringify(db, null, 4), e => { if(e) console.log(e) });
 
-        
+        //#endregion
         
         if(!message.content.startsWith(config.PREFIX)) return;
-
+		
         
         const args = message.content.slice(config.PREFIX.length).split(/ +/);
         
@@ -134,22 +149,26 @@ client.on('message',
         //Vérifie si la fonction à besoin de plus d'arguments
         if(command.information)
         {
+			/** @type {any} */
             let info;
             switch(command.information)
             {
                 case 'database':
                     info = db;
-                    break;
+					break;
+				case 'streamers':
+					info = streamers;
+					break;
+				default:
+					console.log(`Information ${command.information} n'existe pas.`);
             }
             
             //Envoit la fonction avec les arguments en plus
             command.run(client, message, args, info);
         }
-        else command.run(client, message, args);
+        else command.run(client, message, args); //Sinon lancer la fonction normalement
     }
 );
-
-let {Streamer, getUserId, getUserStream, twitchEmbed} = require('./APIs/twitch.js');
 
 client.on('ready',
     async () =>
@@ -164,18 +183,7 @@ client.on('ready',
         
         ///Vérifie le stream toutes les minutes
         
-        //Créer tout les streamers
         
-        
-        
-        let streamers =
-        [
-            new Streamer('Valhyan'    ),
-            new Streamer('Thalounette'),
-            new Streamer('Delphes99'  ),
-            new Streamer('neight___'  ),
-            new Streamer('thomasc2607')
-        ];
         
         //Obtenir les ids des streamers
         
