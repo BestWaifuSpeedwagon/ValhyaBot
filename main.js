@@ -67,7 +67,7 @@ loadCommands();
 let db = JSON.parse(fs.readFileSync("data/database.json", "utf-8"));
 
 //Charge les commandes twitch
-const { Streamer, getUserId, getUserStream, twitchEmbed } = require('./APIs/twitch.js');
+const { Streamer, getUserId, getUserStream, twitchEmbed } = require('@API/');
 
 //Créer tout les streamers
 let streamers =

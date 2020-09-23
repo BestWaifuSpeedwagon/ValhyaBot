@@ -202,5 +202,11 @@
         "level": 3,
         "requiredXp": 16.015075125,
         "notification": true
+    },
+    "Maxx#5914": {
+        "xp": 7.000000000000001,
+        "level": 2,
+        "requiredXp": 11.010024999999999,
+        "notification": true
     }
 }
