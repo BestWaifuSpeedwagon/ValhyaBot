@@ -6,7 +6,7 @@ const config =
 }
 
 const https = require('https');
-const { MessageEmbed, MessageAttachment } = require('discord.js');
+const { MessageEmbed, MessageAttachment, TextChannel, Guild } = require('discord.js');
 
 /**
  * 
@@ -97,29 +97,48 @@ function getUserStream(id)
 
 /**
  * 
- * @param {string} name 
  * @param {object} stream 
  */
 
-function twitchEmbed(name, message, stream)
+function twitchEmbed(stream)
 {
 	let embed = new MessageEmbed()
 		.setColor("#d54e12")
-		.setTitle(`${name} est en stream!`)
+		.setTitle(`${stream.channel.name} joue à ${stream.game}!`)
+		.setThumbnail(stream.channel.logo)
 		.setImage(stream.preview.large)
-	
-	embed.addField('Jeu: ', stream.game, false);
-	embed.addField(message, `https://www.twitch.tv/${name}`, false);
+		.setURL(stream.channel.url);
 	
 	return embed;
 }
 
 class Streamer
 {
-	constructor(name)
+	/**
+	 * @property {string} name
+	 * @property {string} id
+	 * @property {TextChannel} channel
+	 * @property {string} guildId
+	 * @property {string} guild
+	 * @property {boolean} online
+	 */
+	
+	/**
+	 * 
+	 * @param {string} name 
+	 * @param {TextChannel} channel
+	 * @param {string} guildId
+	 * @param {string} guild
+	 * @param {string} id
+	 */
+	
+	constructor(name, channel, guildId, guild, id)
 	{
 		this.name = name;
-		this.id = '';
+		this.channel = channel;
+		this.guildId = guildId;
+		this.guild = guild;
+		this.id = id;
 
 		this.online = false;
 	}

@@ -1,6 +1,6 @@
 const { Client, Message } = require('discord.js');
 
-const twitch = require('../../APIs/twitch.js');
+const twitch = require.main.require('./API/twitch.js');
 
 /**
  * 
@@ -25,7 +25,7 @@ exports.run = async function(client, message, args)
 			message.channel.send(`${args[0]} n'est pas en ligne!`);
 			break;
 		default:
-			message.channel.send(twitch.twitchEmbed(args[0], "Lien du stream", stream));
+			message.channel.send(twitch.twitchEmbed(stream));
 			break;
 	}
 }

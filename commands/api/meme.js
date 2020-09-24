@@ -1,5 +1,5 @@
 const { MessageEmbed, Client, Message } = require('discord.js');
-const reddit = require('../../APIs/reddit.js');
+const reddit = require('../../API/reddit.js');
 
 /**
  * 
