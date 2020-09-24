@@ -62,7 +62,7 @@ exports.run = function(client, message, args, database)
                     "notification": true
                 }
                 //Ecris la nouvelle personne dans le .json
-                fs.writeFile("./data/database.json", JSON.stringify(database, null, 4), e => { if(e) console.log(e) });
+                fs.writeFile("./data/level.json", JSON.stringify(database, null, 4), e => { if(e) console.log(e) });
             }
 
             let embed = new MessageEmbed()

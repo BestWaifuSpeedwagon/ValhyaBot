@@ -8,12 +8,13 @@ const config =
     twitchID: process.env.twitchID
 }
 
-const { Client, Collection, ClientApplication, TextChannel } = require('discord.js');
+const { Client, Collection, ClientApplication, TextChannel, Guild } = require('discord.js');
 const fs = require('fs');
 const { help } = require('./commands/reactions/poll');
 
 
 const client = new Client();
+
 
 client.commands = new Collection();
 
@@ -50,11 +51,30 @@ function loadCommands(dir = __dirname + "/commands/")
     );
 };
 
+/**
+ * 
+ * @param {Guild} guild 
+ * @param {string} name 
+ * @returns {TextChannel}
+ */
+
+function findChannel(guild, name)
+{
+	return guild.channels.cache.find(g => g.name === name);
+}
+
 //#endregion
 
+//#region Chargement
+
+//Charge les commandes
 loadCommands();
 
-//Définis "l'objet" utilisé dans le json
+//Charge l'api twitch
+const { Streamer, getUserId, getUserStream, twitchEmbed } = require('./API/twitch.js');
+
+
+//Définis la base de données
 /**
  * @typedef {Object} UserLevel
  * @property {number} xp
@@ -64,11 +84,38 @@ loadCommands();
  */
 
 /** @type {Object.<string, UserLevel>} */
-let db = JSON.parse(fs.readFileSync("data/database.json", "utf-8"));
+let db;
+
+
+//Définis les streamers
+/**
+ * @typedef {Object} jsonStreamer
+ * @property {string} name
+ * @property {string} id
+ * @property {string} guild
+ * @property {string} guildId
+ * @property {string} channel
+ */
+
+/** @type {Streamer[]} */
+let streamers = [];
+
+
+//#endregion
+
+client.on('disconnect',
+	() =>
+	{
+		fs.writeFile("./data/level.json", JSON.stringify(db, null, 4), e => { if(e) console.log(e); });
+		fs.writeFile("./data/streamers.json", JSON.stringify(streamers, null, 4), e => { if(e) console.log(e); });
+	}
+);
 
 client.on('message',
     message => 
     {
+		//#region Niveau / xp
+		
         if(message.author.bot) return;
         if(!db[message.author.tag]) 
         {
@@ -77,7 +124,7 @@ client.on('message',
                 "xp": 0,
                 "level": 1,
                 "requiredXp": 5,
-                "notification": true
+                "notification": false
             }
         }
         
@@ -101,14 +148,11 @@ client.on('message',
                 message.author.send(`Bravo ${message.author}, tu es passé au niveau ${userlevel.level} !\nCeci est envoyé automatiquement, pour désactiver les notification, fait \`!vbot notification\``);
             }
         }
-        
-        //Ecris les nouvelles valeurs dans un json.
-        fs.writeFile("./data/database.json", JSON.stringify(db, null, 4), e => { if(e) console.log(e) });
 
-        
+        //#endregion
         
         if(!message.content.startsWith(config.PREFIX)) return;
-
+		
         
         const args = message.content.slice(config.PREFIX.length).split(/ +/);
         
@@ -134,108 +178,93 @@ client.on('message',
         //Vérifie si la fonction à besoin de plus d'arguments
         if(command.information)
         {
+			/** @type {any} */
             let info;
             switch(command.information)
             {
                 case 'database':
                     info = db;
-                    break;
+					break;
+				case 'streamers':
+					info = streamers;
+					break;
+				default:
+					console.log(`Information ${command.information} n'existe pas.`);
             }
             
             //Envoit la fonction avec les arguments en plus
             command.run(client, message, args, info);
         }
-        else command.run(client, message, args);
+        else command.run(client, message, args); //Sinon lancer la fonction normalement
     }
 );
-
-let {Streamer, getUserId, getUserStream, twitchEmbed} = require('./APIs/twitch.js');
 
 client.on('ready',
     async () =>
     {
-        console.log(`Logged in as ${client.user.username} !`);
+		//Met l'activité
+		console.log(`Logged in as ${client.user.username} !`);
+		
         client.user.setStatus("online");
-        
         client.user.setActivity("!vbot", {type: "LISTENING"});
-        //Trouver une channel spécifique
-        //let channel = client.guilds.cache.find(guild => guild.name === "NOM").channels.cache.find(channel => channel.id === "ID");
-        
-        
+		
+		
+		//#region Chargement
+		db = JSON.parse(fs.readFileSync('./data/level.json', "utf-8"))
+
+		JSON.parse(fs.readFileSync("./data/streamers.json", "utf-8")).forEach(
+			/** @param {jsonStreamer} s */
+			s =>
+			{
+				let channel = findChannel(client.guilds.cache.get(s.guildId), s.channel);
+				streamers.push(new Streamer(s.name, channel, s.guildId, s.guild, s.id));
+			}
+		)
+		
+		//#endregion
+		
         ///Vérifie le stream toutes les minutes
-        
-        //Créer tout les streamers
-        
-        
-        
-        let streamers =
-        [
-            new Streamer('Valhyan'    ),
-            new Streamer('Thalounette'),
-            new Streamer('Delphes99'  ),
-            new Streamer('neight___'  ),
-            new Streamer('thomasc2607')
-        ];
         
         //Obtenir les ids des streamers
         
-        streamers.forEach(
-            async s => 
-            {
-                let _id = await getUserId(s.name);
-                
-                s.id = _id;
-            }
-        );
-		
-        //Obtenir id des salons info
-        /** @type {Collection.<string, TextChannel>} */
-        let channelCache = client.guilds.cache.find(g => g.name === "Valhyan").channels.cache;
-		
-        /** @type {TextChannel[]} */
-        let channels = 
-        [
-			channelCache.find(c => c.name === "les-autres-streams"),
-			channelCache.find(c => c.id === "696064128934215710")
-        ]
 		
         setInterval(
             async () =>
             {
-                for(let streamer of streamers)
-                {
-                    let stream = await getUserStream(streamer.id);
-                    
-                    if(stream === null) //Pas de stream en cours
-                    {
-                        if(!streamer.online) continue; //Vérifie si on le sait déjà
-                        
-                        streamer.online = false;
-                    }
-                    else //Stream en cours
-                    {
-                        if(streamer.online) continue; //Vérifie si on le sait déjà
-                        
-                        //Envoie un embed
-						let channel = 0;
-						let message = "Lien du stream";
+                streamers.forEach(
+					async streamer =>
+					{
+						let stream = await getUserStream(streamer.id);
 						
-                        switch(streamer.name)
-                        {
-                            case 'Valhyan':
-								channel = 1;
-								message = "Venez voir le roi du Choo Choo!";
-								break;
-							case 'Delphes99':
-								message = "Le maitre du kotlin!";
-								break;
+						if(stream === null) //Pas de stream en cours
+						{
+							if(!streamer.online) return; //Vérifie si on le sait déjà
+							
+							streamer.online = false;
 						}
-						
-						channels[channel].send(twitchEmbed(streamer.name, message, stream));
-                        
-                        streamer.online = true;
-                    }
-                }
+						else //Stream en cours
+						{
+							if(streamer.online) return; //Vérifie si on le sait déjà
+							
+							//Envoie un embed
+							// let message = "Lien du stream";
+							
+							// switch(streamer.name)
+							// {
+							// 	case 'Valhyan':
+							// 		message = "Venez voir le roi du Choo Choo!";
+							// 		break;
+							// 	case 'Delphes99':
+							// 		message = "Le maitre du kotlin!";
+							// 		break;
+							// }
+							
+							streamer.channel.send(twitchEmbed(stream));
+							
+							streamer.online = true;
+						}
+					}
+				);
             },
             60000
         )

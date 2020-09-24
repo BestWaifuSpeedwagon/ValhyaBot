@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"module": "commonJS"
+	},
+	"exclude": [
+		"node_modules"
+	]
+}

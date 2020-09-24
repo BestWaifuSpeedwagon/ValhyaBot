@@ -1,5 +1,10 @@
-const { MessageEmbed, MessageAttachment } = require('discord.js');
+const { MessageEmbed, MessageAttachment, Client, Message } = require('discord.js');
 
+/**
+ * @param {Client} client
+ * @param {Message} message
+ */
+ 
 exports.run = (client, message) =>
 {
 	let embed = new MessageEmbed()
@@ -7,16 +12,9 @@ exports.run = (client, message) =>
 		.setTitle("Liste des commandes :");
 	
 	
-		
 	for(c of client.commands)
 	{
-		embed.addFields(
-			{
-				name: `!vbot ${c[1].help.name}`,
-				value: c[1].help.description,
-				inline: false
-			}
-		);
+		embed.addField(`!vbot ${c[1].help.name}`, c[1].help.description, false);
 	}
 	
 	message.channel.send(embed);
