@@ -1,5 +1,6 @@
 const { Client, Message, MessageEmbed, Guild } = require("discord.js");
 const {Streamer, getUserId} = require('../../API/twitch.js');
+const fs = require('fs');
 
 /**
  * 
@@ -13,14 +14,24 @@ exports.run = async function(client, message, args, streamers)
 	switch(args.shift())
 	{
 		case 'add':
-			let user = await getUserId(args[0]);
+			//Si pas assez d'arguments sont donnés
+			if(args.length < 2) return message.channel.send(`Utilisation : \`!streamer add <streamer> <salon>\``);	
 			
+			//Obtenir l'id utilisateur twitch
+			let user = await getUserId(args[0]);
+			//Si l'utilisateur n'existe pas
 			if(user._total === 0) return message.channel.send(`${args[0]} n'existe pas!`)
 			
-			streamers.push(new Streamer(args[0], message.guild.channels.cache.find(c => c.name === args[1]), message.guild.id, message.guild.name, user.users[0]._id));
+			//Obtiens le salon
+			let channel = message.guild.channels.cache.find(c => c.name === args[1]);
 			
-			console.log(streamers);
+			//Si le salon n'existe pas ou n'est pas textuel
+			if(channel === undefined || channel.type !== 'text') return message.channel.send(`Salon textuel requis.`);
 			
+			//Ajoute le streamer
+			streamers.push(new Streamer(args[0], channel, message.guild.id, message.guild.name, user.users[0]._id));
+			
+			//Écris le au fichier
 			fs.writeFile("./data/streamers.json", JSON.stringify(streamers, null, 4), e => { if(e) console.log(e); });
 			break;
 		case 'remove':

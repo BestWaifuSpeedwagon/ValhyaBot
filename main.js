@@ -51,18 +51,6 @@ function loadCommands(dir = __dirname + "/commands/")
     );
 };
 
-/**
- * 
- * @param {Guild} guild 
- * @param {string} name 
- * @returns {TextChannel}
- */
-
-function findChannel(guild, name)
-{
-	return guild.channels.cache.find(g => g.name === name);
-}
-
 //#endregion
 
 //#region Chargement
@@ -94,7 +82,7 @@ let db;
  * @property {string} id
  * @property {string} guild
  * @property {string} guildId
- * @property {string} channel
+ * @property {TextChannel} channel
  */
 
 /** @type {Streamer[]} */
@@ -185,11 +173,11 @@ client.on('message',
 					break;
 				default:
 					console.log(`Information ${command.information} n'existe pas.`);
+					break;
             }
             
             //Envoit la fonction avec les arguments en plus
 			command.run(client, message, args, info);
-			console.log(streamers);
         }
         else command.run(client, message, args); //Sinon lancer la fonction normalement
     }
@@ -206,13 +194,17 @@ client.on('ready',
 		
 		
 		//#region Chargement
+		//Charge la base de donnée
 		db = JSON.parse(fs.readFileSync('./data/level.json', "utf-8"))
 
+		//Charge les streamers
 		JSON.parse(fs.readFileSync("./data/streamers.json", "utf-8")).forEach(
 			/** @param {jsonStreamer} s */
 			s =>
 			{
-				let channel = findChannel(client.guilds.cache.get(s.guildId), s.channel);
+				/** @type {TextChannel} */
+				let channel = client.guilds.cache.get(s.guildId).channels.cache.get(s.channel.id);
+				
 				streamers.push(new Streamer(s.name, channel, s.guildId, s.guild, s.id));
 			}
 		)

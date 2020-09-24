@@ -1,30 +1,100 @@
 [
-	{
-		"name": "Valhyan",
-		"id": "45788228",
-		"guild": "Valhyan",
-		"guildId": "689551511315152896",
-		"channel": "info-stream-ℹ"
-	},
-	{
-		"name": "Delphes99",
-		"id": "9993630013",
-		"guild": "Valhyan",
-		"guildId": "689551511315152896",
-		"channel": "les-autres-streams"
-	},
-	{
-		"name": "Thalounette",
-		"id": "417227381",
-		"guild": "Valhyan",
-		"guildId": "689551511315152896",
-		"channel": "les-autres-streams"
-	},
-	{
-		"name": "neight___",
-		"id": "180913383",
-		"guild": "Valhyan",
-		"guildId": "689551511315152896",
-		"channel": "les-autres-streams"
-	}
+    {
+        "name": "Valhyan",
+        "channel": {
+            "type": "text",
+            "deleted": false,
+            "id": "696064128934215710",
+            "name": "info-stream-ℹ",
+            "rawPosition": 4,
+            "parentID": "689551511315152918",
+            "permissionOverwrites": [
+                "689551511315152896"
+            ],
+            "topic": "C'est ici que les streams sont annoncés.",
+            "nsfw": false,
+            "lastMessageID": "758308770253373442",
+            "rateLimitPerUser": 0,
+            "lastPinTimestamp": 1589283612744,
+            "guild": "689551511315152896",
+            "messages": [],
+            "createdTimestamp": 1586025020584
+        },
+        "guildId": "689551511315152896",
+        "guild": "Valhyan",
+        "id": "45788228",
+        "online": false
+    },
+    {
+        "name": "Delphes99",
+        "channel": {
+            "type": "text",
+            "deleted": false,
+            "id": "754743336249589950",
+            "name": "les-autres-streams",
+            "rawPosition": 9,
+            "parentID": "689551511315152918",
+            "permissionOverwrites": [],
+            "topic": null,
+            "nsfw": false,
+            "lastMessageID": "758779014579355701",
+            "rateLimitPerUser": 0,
+            "lastPinTimestamp": null,
+            "guild": "689551511315152896",
+            "messages": [],
+            "createdTimestamp": 1600015233815
+        },
+        "guildId": "689551511315152896",
+        "guild": "Valhyan",
+        "id": "9993630013",
+        "online": false
+    },
+    {
+        "name": "Thalounette",
+        "channel": {
+            "type": "text",
+            "deleted": false,
+            "id": "754743336249589950",
+            "name": "les-autres-streams",
+            "rawPosition": 9,
+            "parentID": "689551511315152918",
+            "permissionOverwrites": [],
+            "topic": null,
+            "nsfw": false,
+            "lastMessageID": "758779014579355701",
+            "rateLimitPerUser": 0,
+            "lastPinTimestamp": null,
+            "guild": "689551511315152896",
+            "messages": [],
+            "createdTimestamp": 1600015233815
+        },
+        "guildId": "689551511315152896",
+        "guild": "Valhyan",
+        "id": "417227381",
+        "online": true
+    },
+    {
+        "name": "neight___",
+        "channel": {
+            "type": "text",
+            "deleted": false,
+            "id": "754743336249589950",
+            "name": "les-autres-streams",
+            "rawPosition": 9,
+            "parentID": "689551511315152918",
+            "permissionOverwrites": [],
+            "topic": null,
+            "nsfw": false,
+            "lastMessageID": "758779014579355701",
+            "rateLimitPerUser": 0,
+            "lastPinTimestamp": null,
+            "guild": "689551511315152896",
+            "messages": [],
+            "createdTimestamp": 1600015233815
+        },
+        "guildId": "689551511315152896",
+        "guild": "Valhyan",
+        "id": "180913383",
+        "online": false
+    }
 ]
