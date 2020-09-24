@@ -8,9 +8,63 @@ const config =
 const https = require('https');
 const { MessageEmbed, MessageAttachment, TextChannel, Guild } = require('discord.js');
 
+//#region Definitions
+
+/** @typedef {Object} twitchUser
+* @property {String} _id
+* @property {String} bio
+* @property {String} created_at
+* @property {String} display_name
+* @property {String} logo
+* @property {String} name
+* @property {String} type
+* @property {String} updated_at
+*/
+ 
+/** @typedef {Object} twitchUserResponse
+* @property {Number} _total
+* @property {twitchUser[]} users
+*/
+
+/** @typedef {Object} twitchChannel
+* @property {Number} _id
+* @property {String} broadcaster_language
+* @property {String} created_at
+* @property {String} display_name
+* @property {Number} followers
+* @property {String} game
+* @property {String} language
+* @property {String} logo
+* @property {Boolean} mature
+* @property {String} name
+* @property {Boolean} partner
+* @property {String} profile_banner
+* @property {Null} profile_banner_background_color
+* @property {String} status
+* @property {String} updated_at
+* @property {String} url
+* @property {String} video_banner
+* @property {Number} views
+*/
+
+/** @typedef {Object} twitchStream
+* @property {Number} _id
+* @property {Number} average_fps
+* @property {String} created_at
+* @property {Number} delay
+* @property {String} game
+* @property {Boolean} is_playlist
+* @property {Number} video_height
+* @property {Number} viewers
+* @property {{small: string, medium: string, large: string, template: string}} preview
+* @property {twitchChannel} channel
+*/
+
+//#endregion
+
 /**
- * 
  * @param {string} name Twitch username
+ * @returns {Promise<twitchUserResponse>}
  */
 
 function getUserId(name)
@@ -37,12 +91,10 @@ function getUserId(name)
 					res.on('end',
 						() =>
 						{
+							/** @type {twitchUserResponse} */
 							let parsedData = JSON.parse(rawData);
-
-
-							if (parsedData._total === 0) return undefined;
 						
-							resolve(parsedData.users[0]._id);
+							resolve(parsedData);
 						}
 					);
 				}
@@ -54,6 +106,7 @@ function getUserId(name)
 /**
  * 
  * @param {string} id User id
+ * @returns {Promise<twitchStream>}
  */
 
 function getUserStream(id)
@@ -140,7 +193,7 @@ class Streamer
 		this.guild = guild;
 		this.id = id;
 
-		this.online = false;
+		this.online = true;
 	}
 }
 

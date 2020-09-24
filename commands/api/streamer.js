@@ -1,5 +1,5 @@
 const { Client, Message, MessageEmbed, Guild } = require("discord.js");
-const {Streamer} = require('../../API/twitch.js');
+const {Streamer, getUserId} = require('../../API/twitch.js');
 
 /**
  * 
@@ -8,11 +8,20 @@ const {Streamer} = require('../../API/twitch.js');
  * @param {string[]} args 
  * @param {Streamer[]} streamers
  */
-exports.run = function(client, message, args, streamers)
+exports.run = async function(client, message, args, streamers)
 {
 	switch(args.shift())
 	{
 		case 'add':
+			let user = await getUserId(args[0]);
+			
+			if(user._total === 0) return message.channel.send(`${args[0]} n'existe pas!`)
+			
+			streamers.push(new Streamer(args[0], message.guild.channels.cache.find(c => c.name === args[1]), message.guild.id, message.guild.name, user.users[0]._id));
+			
+			console.log(streamers);
+			
+			fs.writeFile("./data/streamers.json", JSON.stringify(streamers, null, 4), e => { if(e) console.log(e); });
 			break;
 		case 'remove':
 			break;

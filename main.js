@@ -103,14 +103,6 @@ let streamers = [];
 
 //#endregion
 
-client.on('disconnect',
-	() =>
-	{
-		fs.writeFile("./data/level.json", JSON.stringify(db, null, 4), e => { if(e) console.log(e); });
-		fs.writeFile("./data/streamers.json", JSON.stringify(streamers, null, 4), e => { if(e) console.log(e); });
-	}
-);
-
 client.on('message',
     message => 
     {
@@ -148,9 +140,12 @@ client.on('message',
                 message.author.send(`Bravo ${message.author}, tu es passé au niveau ${userlevel.level} !\nCeci est envoyé automatiquement, pour désactiver les notification, fait \`!vbot notification\``);
             }
         }
-
+		
+		fs.writeFile("./data/level.json", JSON.stringify(db, null, 4), e => { if(e) console.log(e); });
+		
         //#endregion
-        
+		
+		//Est-ce que le message commence par le préfixe voulu?
         if(!message.content.startsWith(config.PREFIX)) return;
 		
         
@@ -193,7 +188,8 @@ client.on('message',
             }
             
             //Envoit la fonction avec les arguments en plus
-            command.run(client, message, args, info);
+			command.run(client, message, args, info);
+			console.log(streamers);
         }
         else command.run(client, message, args); //Sinon lancer la fonction normalement
     }
