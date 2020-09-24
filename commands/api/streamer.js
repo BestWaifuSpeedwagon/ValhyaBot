@@ -16,6 +16,8 @@ exports.run = async function(client, message, args, streamers)
 		case 'add':
 			//Si pas assez d'arguments sont donnés
 			if(args.length < 2) return message.channel.send(`Utilisation : \`!streamer add <streamer> <salon>\``);	
+			//Si l'utilisateur existe déjà
+			if(streamers.some(s => s.name === args[0])) return message.channel.send(`L'utilisateur existe déjà!`);
 			
 			//Obtenir l'id utilisateur twitch
 			let user = await getUserId(args[0]);
@@ -30,6 +32,7 @@ exports.run = async function(client, message, args, streamers)
 			
 			//Ajoute le streamer
 			streamers.push(new Streamer(args[0], channel, message.guild.id, message.guild.name, user.users[0]._id));
+			message.channel.send(`Ajouté ${args[0]} à la liste des streamers vérifiés, dans le salon ${message.guild.name}/${args[1]}`);
 			
 			//Écris le au fichier
 			fs.writeFile("./data/streamers.json", JSON.stringify(streamers, null, 4), e => { if(e) console.log(e); });
