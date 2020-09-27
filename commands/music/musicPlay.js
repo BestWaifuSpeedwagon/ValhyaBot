@@ -41,8 +41,9 @@ exports.run = async function(client, message, args, queue)
 			
 			if(!song)
 			{
-				serverQueue.voiceChannel.leave();
+				serverQueue.connection.disconnect();
 				queue.delete(message.guild.id);
+				return;
 			}
 			
 			try
