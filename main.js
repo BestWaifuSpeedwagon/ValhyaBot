@@ -8,7 +8,7 @@ const config =
     twitchID: process.env.twitchID
 }
 
-const { Client, Collection, ClientApplication, TextChannel, Guild } = require('discord.js');
+const { Client, Collection, ClientApplication, TextChannel, Guild, VoiceChannel } = require('discord.js');
 const fs = require('fs');
 const { help } = require('./commands/reactions/poll');
 
@@ -51,21 +51,9 @@ function loadCommands(dir = __dirname + "/commands/")
     );
 };
 
-/**
- * 
- * @param {Guild} guild 
- * @param {string} name 
- * @returns {TextChannel}
- */
-
-function findChannel(guild, name)
-{
-	return guild.channels.cache.find(g => g.name === name);
-}
-
 //#endregion
 
-//#region Chargement
+//#region Chargement / Informations
 
 //Charge les commandes
 loadCommands();
@@ -94,22 +82,18 @@ let db;
  * @property {string} id
  * @property {string} guild
  * @property {string} guildId
- * @property {string} channel
+ * @property {TextChannel} channel
  */
 
 /** @type {Streamer[]} */
 let streamers = [];
 
+const {queueConstruct} = require('./API/music.js');
+
+/** @type {Map.<string, queueConstruct>} */
+const queue = new Map();
 
 //#endregion
-
-client.on('disconnect',
-	() =>
-	{
-		fs.writeFile("./data/level.json", JSON.stringify(db, null, 4), e => { if(e) console.log(e); });
-		fs.writeFile("./data/streamers.json", JSON.stringify(streamers, null, 4), e => { if(e) console.log(e); });
-	}
-);
 
 client.on('message',
     message => 
@@ -148,9 +132,12 @@ client.on('message',
                 message.author.send(`Bravo ${message.author}, tu es passé au niveau ${userlevel.level} !\nCeci est envoyé automatiquement, pour désactiver les notification, fait \`!vbot notification\``);
             }
         }
-
+		
+		fs.writeFile("./data/level.json", JSON.stringify(db, null, 4), e => { if(e) console.log(e); });
+		
         //#endregion
-        
+		//#region Test de la commande
+		//Est-ce que le message commence par le préfixe voulu?
         if(!message.content.startsWith(config.PREFIX)) return;
 		
         
@@ -174,7 +161,8 @@ client.on('message',
             }
             return message.channel.send(noArgsReply);
         }
-        
+		//#endregion
+		
         //Vérifie si la fonction à besoin de plus d'arguments
         if(command.information)
         {
@@ -188,12 +176,16 @@ client.on('message',
 				case 'streamers':
 					info = streamers;
 					break;
+				case 'music':
+					info = queue;
+					break;
 				default:
 					console.log(`Information ${command.information} n'existe pas.`);
+					break;
             }
             
-            //Envoit la fonction avec les arguments en plus
-            command.run(client, message, args, info);
+            //Lance la fonction avec les arguments en plus
+			command.run(client, message, args, info);
         }
         else command.run(client, message, args); //Sinon lancer la fonction normalement
     }
@@ -210,13 +202,17 @@ client.on('ready',
 		
 		
 		//#region Chargement
+		//Charge la base de donnée
 		db = JSON.parse(fs.readFileSync('./data/level.json', "utf-8"))
 
+		//Charge les streamers
 		JSON.parse(fs.readFileSync("./data/streamers.json", "utf-8")).forEach(
 			/** @param {jsonStreamer} s */
 			s =>
 			{
-				let channel = findChannel(client.guilds.cache.get(s.guildId), s.channel);
+				/** @type {TextChannel} */
+				let channel = client.guilds.cache.get(s.guildId).channels.cache.get(s.channel.id);
+				
 				streamers.push(new Streamer(s.name, channel, s.guildId, s.guild, s.id));
 			}
 		)
