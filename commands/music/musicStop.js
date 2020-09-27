@@ -24,7 +24,7 @@ exports.run = function(client, message, args, queue)
 exports.help = 
 {
 	name: "stop",
-	description: "",
+	description: "Déconnecte le bot du salon vocal.",
 	usage: "",
 	args: false
 }
