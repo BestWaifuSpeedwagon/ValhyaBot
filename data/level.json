@@ -1,8 +1,32 @@
 {
     "davawen#6423": {
-        "xp": 28.90914561185311,
-        "level": 7,
-        "requiredXp": 36.03552939694073,
+        "xp": 73.78924331604955,
+        "level": 25,
+        "requiredXp": 126.13279557508642,
+        "notification": false
+    },
+    "Kamagyu#1421": {
+        "xp": 55.6112754930649,
+        "level": 14,
+        "requiredXp": 71.07232113192843,
+        "notification": false
+    },
+    "Kagami_#3482": {
+        "xp": 7.515159147897935,
+        "level": 11,
+        "requiredXp": 56.05639583270099,
+        "notification": false
+    },
+    "Maxx#5914": {
+        "xp": 2.000000000000001,
+        "level": 2,
+        "requiredXp": 11.010024999999999,
+        "notification": false
+    },
+    "Elunnor#4401": {
+        "xp": 17.422777898452438,
+        "level": 11,
+        "requiredXp": 56.05639583270099,
         "notification": false
     }
 }

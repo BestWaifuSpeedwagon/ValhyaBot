@@ -8,7 +8,7 @@ const config =
     twitchID: process.env.twitchID
 }
 
-const { Client, Collection, ClientApplication, TextChannel, Guild } = require('discord.js');
+const { Client, Collection, ClientApplication, TextChannel, Guild, VoiceChannel } = require('discord.js');
 const fs = require('fs');
 const { help } = require('./commands/reactions/poll');
 
@@ -53,7 +53,7 @@ function loadCommands(dir = __dirname + "/commands/")
 
 //#endregion
 
-//#region Chargement
+//#region Chargement / Informations
 
 //Charge les commandes
 loadCommands();
@@ -88,6 +88,10 @@ let db;
 /** @type {Streamer[]} */
 let streamers = [];
 
+const {queueConstruct} = require('./API/music.js');
+
+/** @type {Map.<string, queueConstruct>} */
+const queue = new Map();
 
 //#endregion
 
@@ -132,7 +136,7 @@ client.on('message',
 		fs.writeFile("./data/level.json", JSON.stringify(db, null, 4), e => { if(e) console.log(e); });
 		
         //#endregion
-		
+		//#region Test de la commande
 		//Est-ce que le message commence par le préfixe voulu?
         if(!message.content.startsWith(config.PREFIX)) return;
 		
@@ -157,7 +161,8 @@ client.on('message',
             }
             return message.channel.send(noArgsReply);
         }
-        
+		//#endregion
+		
         //Vérifie si la fonction à besoin de plus d'arguments
         if(command.information)
         {
@@ -171,12 +176,15 @@ client.on('message',
 				case 'streamers':
 					info = streamers;
 					break;
+				case 'music':
+					info = queue;
+					break;
 				default:
 					console.log(`Information ${command.information} n'existe pas.`);
 					break;
             }
             
-            //Envoit la fonction avec les arguments en plus
+            //Lance la fonction avec les arguments en plus
 			command.run(client, message, args, info);
         }
         else command.run(client, message, args); //Sinon lancer la fonction normalement

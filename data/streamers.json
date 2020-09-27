@@ -13,7 +13,7 @@
             ],
             "topic": "C'est ici que les streams sont annoncés.",
             "nsfw": false,
-            "lastMessageID": "758308770253373442",
+            "lastMessageID": "759127506170413107",
             "rateLimitPerUser": 0,
             "lastPinTimestamp": 1589283612744,
             "guild": "689551511315152896",
@@ -37,7 +37,7 @@
             "permissionOverwrites": [],
             "topic": null,
             "nsfw": false,
-            "lastMessageID": "758779014579355701",
+            "lastMessageID": "759164751539863553",
             "rateLimitPerUser": 0,
             "lastPinTimestamp": null,
             "guild": "689551511315152896",
@@ -61,7 +61,7 @@
             "permissionOverwrites": [],
             "topic": null,
             "nsfw": false,
-            "lastMessageID": "758779014579355701",
+            "lastMessageID": "759164751539863553",
             "rateLimitPerUser": 0,
             "lastPinTimestamp": null,
             "guild": "689551511315152896",
@@ -85,7 +85,7 @@
             "permissionOverwrites": [],
             "topic": null,
             "nsfw": false,
-            "lastMessageID": "758779014579355701",
+            "lastMessageID": "759164751539863553",
             "rateLimitPerUser": 0,
             "lastPinTimestamp": null,
             "guild": "689551511315152896",
@@ -98,7 +98,7 @@
         "online": true
     },
     {
-        "name": "abc",
+        "name": "sasharot_",
         "channel": {
             "type": "text",
             "deleted": false,
@@ -111,7 +111,7 @@
             ],
             "topic": null,
             "nsfw": false,
-            "lastMessageID": "758743839438798878",
+            "lastMessageID": "759190464506232861",
             "rateLimitPerUser": 0,
             "lastPinTimestamp": null,
             "guild": "548560290426519582",
@@ -120,7 +120,31 @@
         },
         "guildId": "548560290426519582",
         "guild": "Land of JS",
-        "id": "12260",
+        "id": "570195825",
+        "online": true
+    },
+    {
+        "name": "Yuxaa",
+        "channel": {
+            "type": "text",
+            "deleted": false,
+            "id": "754743336249589950",
+            "name": "les-autres-streams",
+            "rawPosition": 9,
+            "parentID": "689551511315152918",
+            "permissionOverwrites": [],
+            "topic": null,
+            "nsfw": false,
+            "lastMessageID": "759164751539863553",
+            "rateLimitPerUser": 0,
+            "lastPinTimestamp": null,
+            "guild": "689551511315152896",
+            "messages": [],
+            "createdTimestamp": 1600015233815
+        },
+        "guildId": "689551511315152896",
+        "guild": "Valhyan",
+        "id": "58824757",
         "online": true
     }
 ]

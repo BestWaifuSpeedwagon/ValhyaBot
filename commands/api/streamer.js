@@ -15,29 +15,62 @@ exports.run = async function(client, message, args, streamers)
 	{
 		case 'add':
 			//Si pas assez d'arguments sont donnés
-			if(args.length < 2) return message.channel.send(`Utilisation : \`!streamer add <streamer> <salon>\``);	
-			//Si l'utilisateur existe déjà
-			if(streamers.some(s => s.name === args[0])) return message.channel.send(`L'utilisateur existe déjà!`);
+			if(args.length % 2 !== 0) return message.channel.send(`Le nombre d'éléments doit être paires : \`!streamer add <streamer> <salon> ...\``);
 			
-			//Obtenir l'id utilisateur twitch
-			let user = await getUserId(args[0]);
-			//Si l'utilisateur n'existe pas
-			if(user._total === 0) return message.channel.send(`${args[0]} n'existe pas!`)
-			
-			//Obtiens le salon
-			let channel = message.guild.channels.cache.find(c => c.name === args[1]);
-			
-			//Si le salon n'existe pas ou n'est pas textuel
-			if(channel === undefined || channel.type !== 'text') return message.channel.send(`Salon textuel requis.`);
-			
-			//Ajoute le streamer
-			streamers.push(new Streamer(args[0], channel, message.guild.id, message.guild.name, user.users[0]._id));
-			message.channel.send(`Ajouté ${args[0]} à la liste des streamers vérifiés, dans le salon ${message.guild.name}/${args[1]}`);
+			for(let i = 0; i < args.length; i+=2)
+			{
+				let name = args[i];
+				let channelName = args[i+1];
+				
+				try
+				{
+					//Si l'utilisateur existe déjà
+					if(streamers.some(s => s.name === name)) throw `${name} est déjà dans la liste!`;
+
+					//Obtenir l'id utilisateur twitch
+					let user = await getUserId(name);
+					//Si l'utilisateur n'existe pas
+					if(user._total === 0) throw `${name} n'existe pas!`;
+
+					//Obtiens le salon
+					let channel = message.guild.channels.cache.find(c => c.name === channelName);
+
+					//Si le salon n'existe pas ou n'est pas textuel
+					if(channel === undefined || channel.type !== 'text') throw `Salon textuel requis.`;
+
+					//Ajoute le streamer
+					streamers.push(new Streamer(name, channel, message.guild.id, message.guild.name, user.users[0]._id));
+					message.channel.send(`Ajouté ${name} à la liste des streamers vérifiés, dans le salon ${message.guild.name}/${channelName}`);
+				}
+				catch(err)
+				{
+					message.channel.send(err);
+					
+					continue;
+				}
+				
+
+			}
 			
 			//Écris le au fichier
 			fs.writeFile("./data/streamers.json", JSON.stringify(streamers, null, 4), e => { if(e) console.log(e); });
 			break;
 		case 'remove':
+			let removed = `Retiré`;
+		
+			//Vérifie pour chaque argument
+			args.forEach(
+				(a, i) =>
+				{
+					let _index = streamers.findIndex(s => s.name === a);
+					if(_index === -1) return;
+					
+					removed += `${i === args.length-1 && args.length > 1 ? ' et' : ','} ${streamers.splice(_index, 1)[0].name}`;
+				}
+			);
+			message.channel.send(removed + '.');
+			//Écris le nouvelle array au fichier
+			fs.writeFile("./data/streamers.json", JSON.stringify(streamers, null, 4), e => { if(e) console.log(e); });
 			break;
 		case 'list':
 			let embed = new MessageEmbed()
@@ -47,14 +80,14 @@ exports.run = async function(client, message, args, streamers)
 			streamers.forEach(
 				s =>
 				{
-					embed.addField(s.name, `${s.guild}/${s.channel.name}`, false);
+					embed.addField(s.name, `**${s.guild}/${s.channel.name}**\nEn ligne : ${s.online}`, false);
 				}
 			)
 			
 			message.channel.send(embed);
 			break;
 		default:
-			message.channel.send('Commandes disponibles :\n\`streamer add <streamer> <salon>\nstreamer remove <streamer 1> <streamer 2> <etc...>\nstreamer list\`')
+			message.channel.send('Commandes disponibles :\n\`streamer add <streamer> <salon> <...>\nstreamer remove <streamer 1> <streamer 2> <etc...>\nstreamer list\`')
 			break;
 	}
 }

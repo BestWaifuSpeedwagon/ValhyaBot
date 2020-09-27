@@ -143,7 +143,7 @@ function getUserStream(id)
 						}
 					);
 				}
-			).on('error', reject);
+			).on('error', e => reject(e));
 		}
 	);
 }
