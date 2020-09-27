@@ -13,7 +13,7 @@ exports.run = async function(client, message, args, queue)
 {
 	try
 	{
-		let regex = /(https:\/\/www\.youtube\.com\/)|(https:\/\/youtu\.be\/)/;
+		let regex = /(https:\/\/)?(www\.)?((youtube\.com)|(youtu\.be))\//;
 		if(!regex.test(args[0])) throw 'URL youtube non valide!';
 		
 		/** @type {QueueConstruct} */
