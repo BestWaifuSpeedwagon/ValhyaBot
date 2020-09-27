@@ -16,6 +16,7 @@ exports.run = function(client, message, args, queue)
 	
 	serverQueue.connection.disconnect();
 	serverQueue.connection = null;
+	serverQueue.dispatcher = null;
 	serverQueue.voiceChannel = null;
 }
 

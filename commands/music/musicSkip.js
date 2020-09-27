@@ -16,13 +16,18 @@ exports.run = function(client, message, args, queue)
 		
 		let serverQueue = queue.get(message.guild.id);
 		
-		if(args)
-			serverQueue.songs.splice(0, parseInt(args[0])-1);
+		if(args) serverQueue.songs.splice(0, parseInt(args[0])-2);
 		
-		if(serverQueue.dispatcher === null) 
+		if(!serverQueue.dispatcher)
+		{
 			serverQueue.songs.shift();
+			message.channel.send(`Passé à **${serverQueue.songs[0].title}**`);
+		}
 		else
+		{
 			serverQueue.dispatcher.emit('finish');
+			message.channel.send(`Joue maintenant **${serverQueue.songs[1].title}**`);
+		}
 	}
 	catch(err)
 	{
@@ -35,7 +40,7 @@ exports.help =
 {
 	name: "skip",
 	description: "Passe à la prochaine musique dans la liste",
-	usage: "",
+	usage: "<numéro de la musique>",
 	args: 1
 }
 

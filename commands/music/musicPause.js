@@ -18,7 +18,11 @@ exports.run = function(client, message, args, queue)
 		
 		if(!serverQueue.dispatcher) return;
 		
-		if(!serverQueue.dispatcher.paused) serverQueue.dispatcher.pause();
+		if(!serverQueue.dispatcher.paused)
+		{
+			serverQueue.dispatcher.pause();
+			message.channel.send(`Pausé **${serverQueue.songs[0].title}**`);
+		}
 		else serverQueue.dispatcher.resume();
 	}
 	catch(err)

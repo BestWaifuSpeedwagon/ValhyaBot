@@ -24,13 +24,12 @@ exports.run = async function(client, message, args, queue)
 			serverQueue = new QueueConstruct(1);
 			queue.set(message.guild.id, serverQueue);
 		}
-		else
-			serverQueue = queue.get(message.guild.id);
+		else serverQueue = queue.get(message.guild.id);
 		
 		const video = await ytdl.getInfo(args[0]);
 
 		serverQueue.songs.push(new Song(video.videoDetails.title, video.videoDetails.video_url));
-		message.channel.send(`Ajouté ${video.videoDetails.title} à la liste.`);
+		message.channel.send(`Ajouté **${video.videoDetails.title}** à la liste.`);
 	}
 	catch(err)
 	{

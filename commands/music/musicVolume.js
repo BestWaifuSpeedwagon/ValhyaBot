@@ -15,7 +15,8 @@ exports.run = function(client, message, args, queue)
 		if(!queue.has(message.guild.id)) throw new Error('Guild not assigned');
 		
 		let serverQueue = queue.get(message.guild.id);
-		serverQueue.volume = Math.min(1, parseFloat(args[0]));
+		
+		serverQueue.volume = Math.min(1, parseInt(args[0])/100);
 		
 		if(serverQueue.dispatcher) serverQueue.dispatcher.setVolume(serverQueue.volume);
 	}
@@ -29,7 +30,7 @@ exports.run = function(client, message, args, queue)
 exports.help = 
 {
 	name: "volume",
-	description: "Change le volume de la musique",
+	description: "Change le volume de la musique, de 0 à 100",
 	usage: "<volume>",
 	args: true
 }
