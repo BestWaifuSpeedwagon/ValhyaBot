@@ -1,5 +1,5 @@
-const { QueueConstruct } = require('API/music');
-const { Client, Message } = require('discord.js');
+const { QueueConstruct } = require('../../API/music');
+const { Client, Message, MessageEmbed } = require('discord.js');
 
 /**
  * 
@@ -10,6 +10,26 @@ const { Client, Message } = require('discord.js');
  */
 exports.run = function(client, message, args, queue)
 {
+	try
+	{
+		if(!queue.has(message.guild.id)) throw `Aucune musique n'est dans la liste.`;
+
+		let string = `**Liste de musiques** :\n`;
+
+		queue.get(message.guild.id).songs.forEach(
+			(s, index) =>
+			{
+				string += `**${index}** - ${s.title}\n`;
+			}
+		);
+
+		message.channel.send(string);
+	}
+	catch(err)
+	{
+		if(typeof err === 'string') message.channel.send(err);
+		else console.error(err);
+	}
 	
 }
 

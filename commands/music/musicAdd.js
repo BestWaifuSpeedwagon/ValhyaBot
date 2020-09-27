@@ -13,6 +13,8 @@ exports.run = async function(client, message, args, queue)
 {
 	try
 	{
+		if(!/https:\/\/www\.youtube\.com\/watch\?v=[a-zA-Z0-9-_]{11}/.test(args[0])) throw 'URL youtube non valide!';
+		
 		/** @type {QueueConstruct} */
 		let serverQueue;
 		
@@ -28,9 +30,10 @@ exports.run = async function(client, message, args, queue)
 		
 		queue.set(message.guild.id, serverQueue);
 	}
-	catch(e)
+	catch(err)
 	{
-		console.log(e);
+		if(typeof err === 'string') message.channel.send(err);
+		else console.log(err);
 	}
 }
 

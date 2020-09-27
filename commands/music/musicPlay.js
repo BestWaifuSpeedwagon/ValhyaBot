@@ -48,7 +48,7 @@ exports.run = async function(client, message, args, queue)
 			
 			try
 			{
-				const dispatcher = serverQueue.connection
+				serverQueue.dispatcher = serverQueue.connection
 					.play(ytdl(song.url, {filter: 'audioonly'}))
 					.on('finish',
 						() =>
@@ -58,9 +58,8 @@ exports.run = async function(client, message, args, queue)
 						}
 					)
 					.on('error', console.error);
-				dispatcher.setVolume(serverQueue.volume);
+				serverQueue.dispatcher.setVolume(serverQueue.volume);
 				
-				serverQueue.dispatcher = dispatcher;
 				message.channel.send(`Commence à jouer **${song.title}**`);
 			}
 			catch(err)
@@ -71,9 +70,10 @@ exports.run = async function(client, message, args, queue)
 		
 		play(serverQueue.songs[0]);
 	}
-	catch(e)
+	catch(err)
 	{
-		
+		if(typeof err === 'string') message.channel.send(err);
+		else console.error(err);
 	}
 }
 
