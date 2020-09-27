@@ -19,7 +19,7 @@ exports.run = function(client, message, args, queue)
 		queue.get(message.guild.id).songs.forEach(
 			(s, index) =>
 			{
-				string += `**${index}** - ${s.title}\n`;
+				string += `**${index+1}** - ${s.title}\n`;
 			}
 		);
 

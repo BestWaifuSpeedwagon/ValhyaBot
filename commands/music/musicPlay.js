@@ -24,7 +24,7 @@ exports.run = async function(client, message, args, queue)
 			
 		const voiceChannel = message.member.voice.channel;
 
-		if(!voiceChannel) throw `Il faut une être dans un salon vocal pour cette commande @${message.author.username}.`;
+		if(!voiceChannel) throw `Il faut une être dans un salon vocal pour cette commande <@${message.author.id}>.`;
 
 		const permissions = voiceChannel.permissionsFor(message.client.user);
 		if(!permissions.has('CONNECT') || !permissions.has('SPEAK')) throw `J'ai besoin de la permission de rejoindre et parler dans le salon vocal!`;
@@ -37,8 +37,6 @@ exports.run = async function(client, message, args, queue)
 		 */
 		function play(song)
 		{
-			console.log(song);
-			
 			if(!song)
 			{
 				serverQueue.connection.disconnect();

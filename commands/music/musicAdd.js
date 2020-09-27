@@ -13,22 +13,23 @@ exports.run = async function(client, message, args, queue)
 {
 	try
 	{
-		if(!/https:\/\/www\.youtube\.com\/watch\?v=[a-zA-Z0-9-_]{11}/.test(args[0])) throw 'URL youtube non valide!';
+		let regex = /(https:\/\/www\.youtube\.com\/)|(https:\/\/youtu\.be\/)/;
+		if(!regex.test(args[0])) throw 'URL youtube non valide!';
 		
 		/** @type {QueueConstruct} */
 		let serverQueue;
 		
 		if(!queue.has(message.guild.id))
+		{
 			serverQueue = new QueueConstruct(1);
-		else
-			serverQueue = queue.get(message.guild.id);
+			queue.set(message.guild.id, serverQueue);
+		}
+		else serverQueue = queue.get(message.guild.id);
 		
 		const video = await ytdl.getInfo(args[0]);
-		
+
 		serverQueue.songs.push(new Song(video.videoDetails.title, video.videoDetails.video_url));
-		message.channel.send(`Ajouté ${video.videoDetails.title} à la liste.`);
-		
-		queue.set(message.guild.id, serverQueue);
+		message.channel.send(`Ajouté **${video.videoDetails.title}** à la liste.`);
 	}
 	catch(err)
 	{

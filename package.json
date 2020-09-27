@@ -13,6 +13,7 @@
     "discord.js": "^12.3.1",
     "dotenv": "^8.2.0",
     "ffmpeg-static": "^4.2.7",
+    "spotify-dl": "^0.1.4",
     "xhr2": "^0.2.0",
     "ytdl-core": "^3.3.0"
   },
