@@ -12,17 +12,14 @@ exports.run = function(client, message, args, queue)
 {
 	try
 	{
-		if(!queue.has(message.guild.id)) throw `Il n'y a aucune musique dans la liste`;
+		if(!queue.has(message.guild.id)) return;
 		
 		let serverQueue = queue.get(message.guild.id);
 		
-		if(args)
-			serverQueue.songs.splice(0, parseInt(args[0])-1);
+		if(!serverQueue.dispatcher) return;
 		
-		if(serverQueue.dispatcher === null) 
-			serverQueue.songs.shift();
-		else
-			serverQueue.dispatcher.emit('finish');
+		if(!serverQueue.dispatcher.paused) serverQueue.dispatcher.pause();
+		else serverQueue.dispatcher.resume();
 	}
 	catch(err)
 	{
@@ -33,10 +30,10 @@ exports.run = function(client, message, args, queue)
 
 exports.help = 
 {
-	name: "skip",
-	description: "Passe à la prochaine musique dans la liste",
+	name: "pause",
+	description: "Pause ou recommence la musique en cours",
 	usage: "",
-	args: 1
+	args: false
 }
 
 exports.information = "music";

@@ -17,8 +17,6 @@ exports.run = function(client, message, args, queue)
 	serverQueue.connection.disconnect();
 	serverQueue.connection = null;
 	serverQueue.voiceChannel = null;
-	
-	queue.set(message.guild.id, serverQueue);
 }
 
 exports.help = 
