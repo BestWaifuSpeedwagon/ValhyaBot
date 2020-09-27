@@ -14,7 +14,7 @@ exports.run = (client, message) =>
 	
 	for(c of client.commands)
 	{
-		embed.addField(`!vbot ${c[1].help.name}`, c[1].help.description, false);
+		embed.addField(`!vbot ${c[1].help.name}`, `* ${c[1].help.description}`, false);
 	}
 	
 	message.channel.send(embed);
