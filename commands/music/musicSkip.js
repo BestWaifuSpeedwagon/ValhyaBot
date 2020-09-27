@@ -32,7 +32,7 @@ exports.help =
 {
 	name: "skip",
 	description: "Passe à la prochaine musique dans la liste",
-	usage: "skip",
+	usage: "",
 	args: false
 }
 

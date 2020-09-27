@@ -82,7 +82,7 @@ exports.help =
 	name: "play",
 	description: "Joue les musiques stockées dans le salon de l'utilisateur.",
 	args: false,
-	usage: "play"
+	usage: ""
 }
 
 exports.information = 'music';
