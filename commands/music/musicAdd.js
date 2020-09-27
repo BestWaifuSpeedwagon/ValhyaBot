@@ -41,7 +41,7 @@ exports.help =
 {
 	name: "music",
 	description: "Joue la vidéo donnée dans le salon de l'utilisateur.",
-	args: false,
+	args: true,
 	usage: "music <url youtube>"
 }
 
