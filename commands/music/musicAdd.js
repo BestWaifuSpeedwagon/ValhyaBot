@@ -13,16 +13,18 @@ exports.run = async function(client, message, args, queue)
 {
 	try
 	{
-		// /** @typedef {('youtube'|'youtubePlaylist'|'discord')} urlRegex */
+		/** @type {('discord'|'youtube'|'youtubePlaylist')} */
+		let type;
 		
-		// /** @type {url[]} */
-		// let urlNames = ['youtube', 'discord', 'youtubePlaylist'];
-		// let type;
+		if(/((youtube\.com)|(youtu\.be))\//.test(args[0]))
+			type = 'discord';
+		else if(/((youtube\.com)|(youtu\.be))\//.test(args[0])) //Test d'abord si c'est une playlist
+			type = 'youtubePlaylist';
+		else if(/((youtube\.com)|(youtu\.be))\//.test(args[0]))
+			type = 'youtube';
 		
 		
-		
-		let regex = /(https:\/\/)?(www\.)?((youtube\.com)|(youtu\.be))\//;
-		if(!regex.test(args[0])) throw 'URL youtube non valide!';
+		if(!/((youtube\.com)|(youtu\.be))\//.test(args[0])) throw 'URL youtube non valide!';
 		message.suppressEmbeds(true);
 		
 		/** @type {QueueConstruct} */
