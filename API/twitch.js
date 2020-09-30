@@ -97,10 +97,11 @@ function getUserId(name)
 							resolve(parsedData);
 						}
 					);
+					res.on('error', reject);
 				}
 			).on('error', reject);
 		}
-	);
+	)
 }
 
 /**

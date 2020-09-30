@@ -3,19 +3,15 @@ require('dotenv').config();
 
 const config = 
 {
-    TOKEN: process.env.TOKEN,
+	TOKEN: process.env.TOKEN,
     PREFIX: process.env.PREFIX,
-    twitchID: process.env.twitchID
+	twitchID: process.env.twitchID
 }
 
 const { Client, Collection, ClientApplication, TextChannel, Guild, VoiceChannel } = require('discord.js');
 const fs = require('fs');
-const { help } = require('./commands/reactions/poll');
-
 
 const client = new Client();
-
-
 client.commands = new Collection();
 
 const { setInterval, setTimeout } = require('timers');
@@ -267,6 +263,4 @@ client.on('ready',
     }
 );
 
-
-
-client.login(config.TOKEN);
+client.login(config.TOKEN).catch(console.log);
