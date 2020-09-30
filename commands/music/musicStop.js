@@ -13,6 +13,7 @@ exports.run = function(client, message, args, queue)
 	if(!queue.has(message.guild.id)) return;
 	
 	let serverQueue = queue.get(message.guild.id);
+	if(!serverQueue.connection) return;
 	
 	serverQueue.connection.disconnect();
 	serverQueue.connection = null;

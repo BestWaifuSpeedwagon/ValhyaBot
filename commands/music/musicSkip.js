@@ -16,17 +16,30 @@ exports.run = function(client, message, args, queue)
 		
 		let serverQueue = queue.get(message.guild.id);
 		
-		if(args) serverQueue.songs.splice(0, parseInt(args[0])-2);
+		if(args)
+		{
+			serverQueue.songs.splice(0, parseInt(args[0])-2);
+			
+		}
 		
 		if(!serverQueue.dispatcher)
 		{
 			serverQueue.songs.shift();
-			message.channel.send(`Passé à **${serverQueue.songs[0].title}**`);
+			
+			let str = '';
+			if(serverQueue.songs) str = `Passé à **${serverQueue.songs[0].title}**`;
+			else str = `Passé toutes les musiques.`;
+			
+			message.channel.send(str);
 		}
 		else
 		{
+			let str = '';
+			if(serverQueue.songs.length > 1) str = `Passé à **${serverQueue.songs[1].title}**`;
+			else str = `Passé toutes les musiques.`;
+			
+			message.channel.send(str);
 			serverQueue.dispatcher.emit('finish');
-			message.channel.send(`Joue maintenant **${serverQueue.songs[1].title}**`);
 		}
 	}
 	catch(err)
