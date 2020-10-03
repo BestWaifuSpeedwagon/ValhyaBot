@@ -27,13 +27,13 @@ exports.run = function(client, message, args, queue)
 			serverQueue.songs.shift();
 			
 			let str = '';
-			if(serverQueue.songs) str = `Passé à **${serverQueue.songs[0].title}**`;
+			if(serverQueue.songs.length > 0) str = `Passé à **${serverQueue.songs[0].title}**`;
 			else
 			{
 				str = `Passé toutes les musiques.`;
 				queue.delete(message.guild.id);
 			}
-			
+
 			message.channel.send(str);
 		}
 		else

@@ -1,14 +1,56 @@
 {
     "davawen#6423": {
-        "xp": 63.65342480796708,
-        "level": 18,
-        "requiredXp": 91.09392893956756,
+        "xp": 6.911448318541375,
+        "level": 22,
+        "requiredXp": 111.11597215534802,
         "notification": false
     },
     "Kamagyu#1421": {
-        "xp": 29.96962249060624,
-        "level": 7,
-        "requiredXp": 36.03552939694073,
+        "xp": 17.344928360655395,
+        "level": 13,
+        "requiredXp": 66.06698620092382,
+        "notification": false
+    },
+    "Ichem Boogy#8512": {
+        "xp": 5,
+        "level": 4,
+        "requiredXp": 21.020150500625,
+        "notification": false
+    },
+    "Valhyan#0155": {
+        "xp": 20.939523121246875,
+        "level": 6,
+        "requiredXp": 31.030377509393766,
+        "notification": false
+    },
+    "luiscity#4293": {
+        "xp": 12.333333333333334,
+        "level": 5,
+        "requiredXp": 26.025251253128125,
+        "notification": false
+    },
+    "Sasu#0101": {
+        "xp": 4.308233208333338,
+        "level": 4,
+        "requiredXp": 21.020150500625,
+        "notification": false
+    },
+    "Tauttore#4200": {
+        "xp": 9.308233208333338,
+        "level": 4,
+        "requiredXp": 21.020150500625,
+        "notification": false
+    },
+    "Kagami_#3482": {
+        "xp": 1.323308333333335,
+        "level": 3,
+        "requiredXp": 16.015075125,
+        "notification": false
+    },
+    "thyzk#8240": {
+        "xp": 3.666666666666666,
+        "level": 2,
+        "requiredXp": 11.010024999999999,
         "notification": false
     }
 }
