@@ -25,6 +25,7 @@ exports.help =
 {
 	name: "debug",
 	description: "Change l'état du bot",
-	usage: "",
-	args: 1
+	usage: "<setStatus>",
+	args: 1,
+	category: null
 }

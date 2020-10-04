@@ -114,6 +114,7 @@ exports.help =
 {
 	name: "poll",
 	description: "Créer un sondage selon les arguments donnés",
+	usage: `<"question"> <"choix1"> <"choix2"> <"etc...">`,
 	args: true,
-	usage: `<"question"> <"choix1"> <"choix2"> <"etc...">`
+	category: null
 }

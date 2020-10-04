@@ -6,6 +6,8 @@ exports.run = (client, message, args) =>
 exports.help =
 {
     name: "ayaya",
-    description: "Renvoie ayaya !",
-    args: false
+	description: "Renvoie ayaya !",
+	usage: "",
+	args: false,
+	category: null
 };

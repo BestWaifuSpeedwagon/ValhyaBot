@@ -29,8 +29,9 @@ exports.help =
 {
 	name: "notification",
 	description: "Active/désactive les notifications de niveau pour l'utilisateur.",
+	usage: "",
 	args: false,
-	usage: ""
+	category: 'level'
 }
 
 exports.information = "database"

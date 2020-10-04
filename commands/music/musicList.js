@@ -38,7 +38,8 @@ exports.help =
 	name: "list",
 	description: "Donne une liste des musiques qui vont jouer",
 	usage: "",
-	args: false
+	args: false,
+	category: 'music'
 }
 
 exports.information = "music";

@@ -37,7 +37,8 @@ exports.help =
 	name: "pause",
 	description: "Pause ou recommence la musique en cours",
 	usage: "",
-	args: false
+	args: false,
+	category: 'music'
 }
 
 exports.information = "music";

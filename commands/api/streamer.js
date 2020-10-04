@@ -97,7 +97,8 @@ exports.help =
 	name: "streamer",
 	description: "Ajoute/retire le streamer donné à la vérification régulière",
 	args: 1,
-	usage: "streamer <add | remove | list>"
+	usage: "streamer <add | remove | list>",
+	category: 'twitch'
 }
 
 exports.information = 'streamers';

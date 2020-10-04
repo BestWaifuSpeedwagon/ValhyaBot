@@ -32,11 +32,11 @@ exports.run = async function(client, message, args, queue)
 			if(/&list/.test(s)) type = 'playlist';
 			else type = 'youtube'
 		}
-		else if(/cdn\.discordapp\.com\/attachments\//.test(s))
+		else if(message.attachments.size > 0) ///cdn\.discordapp\.com\/attachments\//.test(s)
 			type = 'discord';
 		else
 			type = 'text';
-			
+		
 		/** @type {Song} */
 		let push;
 		/** @type {Song[]} */
@@ -44,17 +44,20 @@ exports.run = async function(client, message, args, queue)
 		let videoTitle = '';
 		switch(type)
 		{
-			case 'youtube':{
+			case 'youtube':
+			{
 				const video = await ytdl.getInfo(s);
 				push = new Song('youtube', video.videoDetails.title, video.videoDetails.video_url);
 				videoTitle = video.videoDetails.title;
 				break;
 			}
 			case 'discord':
-				const title = s.split('/').pop();
-				push = new Song('discord', title, s);
-				videoTitle = title;
+			{
+				const video = message.attachments.first()
+				push = new Song('discord', video.name, video.url);
+				videoTitle = video.name;
 				break;
+			}
 			case 'playlist':
 				const playlist = await playlistQuery(s.match(/&list=(.*)?/)[1]);
 				videoTitle = `Playlist: ${playlist.items[0].snippet.title}...`;
@@ -88,10 +91,11 @@ exports.run = async function(client, message, args, queue)
 
 exports.help = 
 {
-	name: "music",
+	name: "add",
 	description: "Joue la vidéo donnée dans le salon de l'utilisateur.",
-	usage: "<url youtube>",
-	args: true
+	usage: "<Youtube URL | Youtube playlist | text>",
+	args: 1,
+	category: 'music'
 }
 
 exports.information = 'music';

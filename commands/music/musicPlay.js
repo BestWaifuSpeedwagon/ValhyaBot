@@ -21,7 +21,7 @@ exports.run = async function(client, message, args, queue)
 			throw `Il n'y a pas de musiques!`;
 		else
 			serverQueue = queue.get(message.guild.id);
-			
+		
 		const voiceChannel = message.member.voice.channel;
 
 		if(!voiceChannel) throw `Il faut une être dans un salon vocal pour cette commande <@${message.author.id}>.`;
@@ -46,8 +46,19 @@ exports.run = async function(client, message, args, queue)
 			
 			try
 			{
+				//let playable;
+				//switch(song.type)
+				//{
+				//	case 'discord':
+				//		playable = song.url;
+				//		break;
+				//	case 'youtube':
+				//		playable = ytdl(song.url, { filter: 'audioonly' });
+				//		break;
+				//}
+				
 				serverQueue.dispatcher = serverQueue.connection
-					.play(ytdl(song.url, {filter: 'audioonly'}))
+					.play(song.type === 'youtube' ? ytdl(song.url, { filter: 'audioonly' }) : song.url)
 					.on('finish',
 						() =>
 						{
@@ -80,7 +91,8 @@ exports.help =
 	name: "play",
 	description: "Joue les musiques stockées dans le salon de l'utilisateur.",
 	args: false,
-	usage: ""
+	usage: "",
+	category: 'music'
 }
 
 exports.information = 'music';

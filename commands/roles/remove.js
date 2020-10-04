@@ -26,6 +26,7 @@ exports.help =
 {
     name: "remove",
     description: "Supprimer plusieurs roles",
-    usage: "<roles à supprimer>",
-    args: true
+    usage: "<Roles à supprimer>",
+	args: true,
+	category: 'role'
 }

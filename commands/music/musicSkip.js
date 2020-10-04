@@ -27,9 +27,13 @@ exports.run = function(client, message, args, queue)
 			serverQueue.songs.shift();
 			
 			let str = '';
-			if(serverQueue.songs) str = `Passé à **${serverQueue.songs[0].title}**`;
-			else str = `Passé toutes les musiques.`;
-			
+			if(serverQueue.songs.length > 0) str = `Passé à **${serverQueue.songs[0].title}**`;
+			else
+			{
+				str = `Passé toutes les musiques.`;
+				queue.delete(message.guild.id);
+			}
+
 			message.channel.send(str);
 		}
 		else
@@ -54,7 +58,8 @@ exports.help =
 	name: "skip",
 	description: "Passe à la prochaine musique dans la liste",
 	usage: "<numéro de la musique>",
-	args: 1
+	args: 1,
+	category: 'music'
 }
 
 exports.information = "music";

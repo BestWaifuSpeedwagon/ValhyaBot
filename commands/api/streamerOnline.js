@@ -32,8 +32,9 @@ exports.run = async function(client, message, args)
 
 exports.help = 
 {
-	name: "twitch",
+	name: "online",
 	description: "Vérifie si un streamer est en ligne",
 	args: true,
-	usage: "<nom>"
+	usage: "<nom>",
+	category: 'twitch',
 }
