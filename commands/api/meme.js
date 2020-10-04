@@ -33,6 +33,6 @@ exports.help =
 	name: "meme",
 	description: "Renvoit les top post de r/dankmemes selon le type donné",
 	args: true,
-	usage: "Mode(hot, new, rising)",
+	usage: "<hot | new | rising>",
 	category: null
 }

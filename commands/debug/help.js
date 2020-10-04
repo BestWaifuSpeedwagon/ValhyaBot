@@ -4,19 +4,12 @@ const {CustomClient} = require('../../main.js');
 /**
  * @param {CustomClient} client
  * @param {Message} message
+ * @param {string[]} args
  */
  
-exports.run = (client, message) =>
+exports.run = (client, message, args) =>
 {
-	//let embed = new MessageEmbed()
-	//	.setColor("#d54e12")
-	//	.setTitle("Liste des commandes :");
 	
-	
-	//for(c of client.commands)
-	//{
-	//	embed.addField(`!vbot ${c[1].help.name}`, `* ${c[1].help.description}`, false);
-	//}
 	//'📁' '💿'
 	/** @type {Object.<string, import('main').command[]>} */
 	let categories = {};
@@ -33,26 +26,43 @@ exports.run = (client, message) =>
 		}
 	)
 	
-	let str = "";
+	let embed = new MessageEmbed()
+		.setColor("#d54e12")
+		.setTitle("Liste des commandes :");
+	
+	
 	for(let category in categories)
 	{
-		str += `📁 ${category != 'null' ? category : 'misc'}\n`;
+		let str = "";
 		categories[category].forEach(
 			c =>
 			{
-				str += `    💿 !vbot ${category != 'null' ? category+' ' : ''}${c.help.name} ${c.help.usage}\n`;
+				let extra = '';
+				if(args.length > 0)
+				{
+					switch(args[0].toLowerCase())
+					{
+						case 'description':
+							extra = `||-${c.help.description}\n`;
+							break;
+					}
+				}
+				
+				let usage = c.help.usage ? c.help.usage : '';
+				str += `|-💿 !vbot ${category != 'null' ? category + ' ' : ''}${c.help.name} ${usage}\n${extra}`;
 			}
-		)
+		);
+		embed.addField(`📁 ${category != 'null' ? category : 'misc'}`, str, false);
 	}
 	
-	message.channel.send(str);
+	message.channel.send(embed);
 }
 
 exports.help = 
 {
 	name: "help",
 	description: "Donne une liste de toutes les commandes",
-	usage: "",
+	usage: "<Rien | description>",
 	args: false,
 	category: null
 }

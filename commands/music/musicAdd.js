@@ -92,8 +92,8 @@ exports.run = async function(client, message, args, queue)
 exports.help = 
 {
 	name: "add",
-	description: "Joue la vidéo donnée dans le salon de l'utilisateur.",
-	usage: "<Youtube URL | Youtube playlist | text>",
+	description: "Ajoute une musique à la liste.",
+	usage: "<URL Youtube | Playlist Youtube | Fichier | Texte>",
 	args: 1,
 	category: 'music'
 }
