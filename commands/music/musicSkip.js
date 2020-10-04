@@ -58,7 +58,8 @@ exports.help =
 	name: "skip",
 	description: "Passe à la prochaine musique dans la liste",
 	usage: "<numéro de la musique>",
-	args: 1
+	args: 1,
+	category: 'music'
 }
 
 exports.information = "music";

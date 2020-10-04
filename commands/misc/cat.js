@@ -39,5 +39,7 @@ exports.help =
 {
 	name: 'cat',
 	description: 'Envoie une image aléatoire de chat.',
-	args: false
+	usage: "",
+	args: false,
+	category: null
 }

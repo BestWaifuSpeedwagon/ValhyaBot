@@ -30,7 +30,8 @@ exports.help =
 	name: "remove",
 	description: "Retire le/les éléments donnés de la liste de musique",
 	usage: "<nombre | nombre0-nombre1>",
-	args: true
+	args: true,
+	category: 'music'
 }
 
 exports.information = "music";

@@ -5,6 +5,8 @@ exports.run = (client, message, args) => {
 exports.help =
 {
     name: "ping",
-    description: "Renvoie Pong !",
-    args: false
+	description: "Renvoie Pong !",
+	usage: "",
+	args: false,
+	category: null
 };

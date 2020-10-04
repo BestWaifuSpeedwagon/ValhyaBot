@@ -25,5 +25,7 @@ exports.help =
 {
 	name: "prime",
 	description: "Voit si un nombre est primaire",
-	args: true
+	usage: "",
+	args: true,
+	category: null
 }

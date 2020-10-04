@@ -83,10 +83,11 @@ exports.run = function(client, message, args, database)
 
 exports.help =
 {
-    name: "userinfo",
+    name: "info",
     description: "Renvoie les information d'un utilisateur mentionné.",
-    usage: "<utilisateur mentionné>",
-    args: 1, //Peut et ne peux pas avoir d'arguments
+    usage: "<Rien | Utilisateur | Rôle>",
+	args: 1, //Peut et ne peux pas avoir d'arguments,
+	category: 'level'
 };
 
 exports.information = 'database';

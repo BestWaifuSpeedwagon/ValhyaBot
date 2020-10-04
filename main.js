@@ -10,40 +10,65 @@ const config =
 
 const { Client, Collection, ClientApplication, TextChannel, Guild, VoiceChannel } = require('discord.js');
 const fs = require('fs');
-
-const client = new Client();
-client.commands = new Collection();
-
 const { setInterval, setTimeout } = require('timers');
 
 /**
  * @typedef {Object} command
  * @property {function} run
- * @property {{name: string, description: string, args: boolean | number, usage: string}} help
+ * @property {{name: string, description: string, args: boolean | number, usage: string, category: string}} help
  * @property {string} [information]
  */
+
+class CustomClient extends Client
+{
+	/**
+	 * @param {import('discord.js').ClientOptions} [options]
+	 */
+	constructor(options)
+	{
+		super(options);
+		
+		/** @type {Collection.<string, command>} */
+		this.commands = new Collection();
+		
+		/** @type {string[]} */
+		this.categories = [];
+	}
+}
+
+exports.CustomClient = CustomClient;
+
+let client = new CustomClient();
+
 //#region Functions
 
 function loadCommands(dir = __dirname + "/commands/") 
 {
     fs.readdirSync(dir).forEach(
         dirs =>
-        {
-            const commands = fs.readdirSync(`${dir}/${dirs}/`).filter(files => files.endsWith(".js"));
+		{
+			const commands = fs.readdirSync(`${dir}/${dirs}/`).filter(files => files.endsWith(".js"));
 
-            for (const file of commands)
-            {   
-                
-                /** @type {command} */
-                const getFileName = require(`${dir}/${dirs}/${file}`);
-                
-                client.commands.set(getFileName.help.name, getFileName);
-                
-                //if(getFileName.help.name == undefined) console.log()
-                
-                //console.log(`Commande chargée: ${config.PREFIX}${getFileName.help.name}`);
-            }
-        }
+			for(const file of commands)
+			{   
+				/** @type {command} */
+				const getFileName = require(`${dir}/${dirs}/${file}`);
+				
+				let name = "";
+				if(getFileName.help.category)
+				{
+					client.categories.push(getFileName.help.category);
+					name = getFileName.help.category + getFileName.help.name;
+				}
+				else name = getFileName.help.name;
+				
+				client.commands.set(name, getFileName);
+				
+				//if(getFileName.help.name == undefined) console.log()
+				
+				//console.log(`Commande chargée: ${config.PREFIX}${getFileName.help.name}`);
+			}
+		}
     );
 };
 
@@ -69,7 +94,6 @@ const { Streamer, getUserId, getUserStream, twitchEmbed } = require('./API/twitc
 
 /** @type {Object.<string, UserLevel>} */
 let db;
-
 
 //Définis les streamers
 /**
@@ -138,9 +162,13 @@ client.on('message',
 		
         
         const args = message.content.slice(config.PREFIX.length).split(/ +/);
-        
-        const commandName = args.shift().toLowerCase();
-        
+		
+		const category = args.shift().toLowerCase();
+		let commandName = '';
+		
+		if(client.categories.includes(category)) commandName = category + args.shift().toLowerCase();
+		else commandName = category; //Si aucune catégorie n'est donnée, la première élément est la commande
+		
         if (!client.commands.has(commandName)) return;
         
         /** @type {command} */
@@ -150,7 +178,7 @@ client.on('message',
         if(command.help.args === true && !args.length)
         {
             let noArgsReply = `Il faut des arguments pour cette commande, ${message.author}`;
-
+			
             if (command.help.usage)
             {
                 noArgsReply += `\nVoici comment utiliser cette commande: \`${config.PREFIX}${command.help.name} ${command.help.usage}\``

@@ -91,10 +91,11 @@ exports.run = async function(client, message, args, queue)
 
 exports.help = 
 {
-	name: "music",
+	name: "add",
 	description: "Joue la vidéo donnée dans le salon de l'utilisateur.",
 	usage: "<Youtube URL | Youtube playlist | text>",
-	args: 1
+	args: 1,
+	category: 'music'
 }
 
 exports.information = 'music';

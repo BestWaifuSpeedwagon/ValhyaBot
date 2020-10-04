@@ -107,5 +107,7 @@ exports.help =
 {
 	name: "sokoban",
 	description: "Créer une partie de sokoban",
-	args: false
+	usage: "",
+	args: false,
+	category: 'game'
 }

@@ -35,6 +35,7 @@ exports.help =
 {
     name: "add",
     description: "Ajouter plusieurs roles",
-    usage: "<roles à ajouter>",
-    args: true
+    usage: "<Roles à ajouter>",
+	args: true,
+	category: 'role'
 }

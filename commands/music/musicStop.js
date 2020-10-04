@@ -26,7 +26,8 @@ exports.help =
 	name: "stop",
 	description: "Déconnecte le bot du salon vocal.",
 	usage: "",
-	args: false
+	args: false,
+	category: 'music'
 }
 
 exports.information = "music";

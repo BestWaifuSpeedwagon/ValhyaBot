@@ -54,6 +54,8 @@ exports.run = (client, message, args) =>
 exports.help =
 {
     name: "dice",
-    description: "Renvoie la valeur de plusieurs dès.",
-    args: false
+	description: "Renvoie la valeur de plusieurs dès.",
+	usage: "",
+	args: false,
+	category: null
 }

@@ -32,7 +32,8 @@ exports.help =
 	name: "volume",
 	description: "Change le volume de la musique, de 0 à 100",
 	usage: "<volume>",
-	args: true
+	args: true,
+	category: 'music'
 }
 
 exports.information = "music";

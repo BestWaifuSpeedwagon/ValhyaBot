@@ -24,8 +24,9 @@ exports.run = function(client, message, args)
 
 exports.help =
 {
-    name: "rollRemove",
+    name: "remove",
     description: "Supprimer plusieurs roles",
-    usage: "<roles à supprimer>",
-    args: true
+    usage: "<Roles à supprimer>",
+	args: true,
+	category: 'role'
 }
