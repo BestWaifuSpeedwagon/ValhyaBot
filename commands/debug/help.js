@@ -43,7 +43,7 @@ exports.run = (client, message, args) =>
 					switch(args[0].toLowerCase())
 					{
 						case 'description':
-							extra = `||-${c.help.description}\n`;
+							extra = `| |-${c.help.description}\n`;
 							break;
 					}
 				}
