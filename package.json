@@ -1,10 +1,10 @@
 {
   "name": "valhyabot",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "",
-  "main": "main.js",
+  "main": "./dist/main.js",
   "scripts": {
-    "start": "node main.js"
+    "start": "node ."
   },
   "author": "Kamagyu, davawen",
   "license": "MIT",

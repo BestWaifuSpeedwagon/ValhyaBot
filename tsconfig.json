@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"target": "ESNext",
+		"outDir": "./dist",
+		"watch": true,
+		"lib": ["DOM", "es2017"],
+		"moduleResolution": "node",
+		"module": "CommonJS"
+	},
+	"include": ["src/"],
+	"exclude": ["node_modules"]
+}
