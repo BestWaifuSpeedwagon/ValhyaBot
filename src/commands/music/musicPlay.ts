@@ -35,19 +35,12 @@ export async function run(client: Client, message: Message, args: string[], queu
 			
 			try
 			{
-				//let playable;
-				//switch(song.type)
-				//{
-				//	case 'discord':
-				//		playable = song.url;
-				//		break;
-				//	case 'youtube':
-				//		playable = ytdl(song.url, { filter: 'audioonly' });
-				//		break;
-				//}
-				
 				serverQueue.dispatcher = serverQueue.connection
-					.play(song.type === 'youtube' ? ytdl(song.url, { filter: 'audioonly' }) : song.url)
+					.play(song.type === 'youtube' ? ytdl(song.url, {
+						filter: 'audioonly',
+						quality: 'highestaudio',
+						highWaterMark: 1 << 25
+					}) : song.url)
 					.on('finish',
 						() =>
 						{
