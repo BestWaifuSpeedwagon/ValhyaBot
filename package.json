@@ -5,7 +5,8 @@
   "main": "./dist/main.js",
   "scripts": {
 	"start": "node dist/main.js",
-	"postinstall": "tsc && mv assets dist/ && mv data dist/ && rm -v -rf src"
+	"tsc": "tsc",
+	"postinstall": "npm run tsc && mv assets dist/ && mv data dist/ && rm -v -rf src"
   },
   "author": "Kamagyu, davawen",
   "license": "MIT",
