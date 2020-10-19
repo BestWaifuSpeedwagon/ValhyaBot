@@ -4,9 +4,8 @@
   "description": "",
   "main": "./dist/main.js",
   "scripts": {
-	"start": "node dist/main.js",
-	"tsc": "tsc",
-	"postinstall": "npm run tsc && mv assets dist/ && mv data dist/ && rm -v -rf src"
+    "start": "node dist/main.js",
+    "postinstall": "tsc && mv assets dist/ && mv data dist/ && rm -v -rf src"
   },
   "author": "Kamagyu, davawen",
   "license": "MIT",
@@ -16,6 +15,7 @@
     "dotenv": "^8.2.0",
     "ffmpeg-static": "^4.2.7",
     "spotify-dl": "^0.4.4",
+    "typescript": "^4.0.3",
     "xhr2": "^0.2.0",
     "ytdl-core": "^3.3.0"
   },
