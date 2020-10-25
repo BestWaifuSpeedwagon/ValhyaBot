@@ -79,8 +79,7 @@ function loadCommands(dir = __dirname + "/commands/"): void
 loadCommands();
 
 //Charge l'api twitch
-import { Streamer, getUserId, getUserStream, twitchEmbed } from './API/twitch.js';
-
+import { getUser, twitchEmbed, getStream, getGame } from './API/twitch.js';
 
 //Définis la base de données
 interface UserLevel
@@ -90,19 +89,10 @@ interface UserLevel
 	requiredXp: number;
 	notification: boolean;
 }
-interface jsonStreamer
-{
-	name: string;
-	id: string;
-	guild: string;
-	guildId: string;
-	channel: TextChannel;
-}
 
 let db: { [key: string]: UserLevel; };
-let streamers: Streamer[] = [];
 
-export { CustomClient, Command, UserLevel, jsonStreamer };
+export { CustomClient, Command, UserLevel };
 import { QueueConstruct } from './API/music';
 
 const queue: Map<string, QueueConstruct> = new Map();
@@ -146,8 +136,7 @@ client.on('message',
 				message.author.send(`Bravo ${message.author}, tu es passé au niveau ${userlevel.level} !\nCeci est envoyé automatiquement, pour désactiver les notification, fait \`!vbot notification\``);
 			}
 		}
-
-		writeFile("dist/data/level.json", JSON.stringify(db, null, 4), e => { if(e) console.log(e); });
+		
 
 		//#endregion
 		//#region Test de la commande
@@ -189,9 +178,6 @@ client.on('message',
 				case 'database':
 					info = db;
 					break;
-				case 'streamers':
-					info = streamers;
-					break;
 				case 'music':
 					info = queue;
 					break;
@@ -215,69 +201,6 @@ client.on('ready',
 
 		client.user.setStatus("online");
 		client.user.setActivity("!vbot", { type: "LISTENING" });
-
-
-		//#region Chargement
-		//Charge la base de donnée
-		db = JSON.parse(readFileSync('dist/data/level.json', "utf-8"));
-
-		//Charge les streamers
-		JSON.parse(readFileSync("dist/data/streamers.json", "utf-8")).forEach(
-			(s: jsonStreamer): void =>
-			{
-				let channel = client.guilds.cache.get(s.guildId).channels.cache.get(s.channel.id) as TextChannel;
-				
-				streamers.push(new Streamer(s.name, channel, s.guildId, s.guild, s.id));
-			}
-		);
-
-		//#endregion
-
-		///Vérifie le stream toutes les minutes
-
-		//Obtenir les ids des streamers
-
-
-		setInterval(
-			async () =>
-			{
-				streamers.forEach(
-					async streamer =>
-					{
-						let stream = await getUserStream(streamer.id);
-
-						if(stream === null) //Pas de stream en cours
-						{
-							if(!streamer.online) return; //Vérifie si on le sait déjà
-
-							streamer.online = false;
-						}
-						else //Stream en cours
-						{
-							if(streamer.online) return; //Vérifie si on le sait déjà
-
-							//Envoie un embed
-							// let message = "Lien du stream";
-
-							// switch(streamer.name)
-							// {
-							// 	case 'Valhyan':
-							// 		message = "Venez voir le roi du Choo Choo!";
-							// 		break;
-							// 	case 'Delphes99':
-							// 		message = "Le maitre du kotlin!";
-							// 		break;
-							// }
-
-							streamer.channel.send(twitchEmbed(stream));
-
-							streamer.online = true;
-						}
-					}
-				);
-			},
-			60000
-		);
 	}
 );
 

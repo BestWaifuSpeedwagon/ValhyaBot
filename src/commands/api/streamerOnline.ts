@@ -1,12 +1,12 @@
 import { Client, Message } from 'discord.js';
 
-import {getUserId, getUserStream, twitchEmbed} from '../../API/twitch';
+import {getStream, getUser, twitchEmbed} from '../../API/twitch';
 
 export async function run(client: Client, message: Message, args: string[])
 {
-	let _id = await getUserId(args[0]);
+	let user = await getUser(args[0]);
 	
-	let stream = await getUserStream(_id.users[0]._id);
+	let stream = await getStream(user.id);
 	
 	switch(stream)
 	{
@@ -17,7 +17,7 @@ export async function run(client: Client, message: Message, args: string[])
 			message.channel.send(`${args[0]} n'est pas en ligne!`);
 			break;
 		default:
-			message.channel.send(twitchEmbed(stream));
+			message.channel.send(await twitchEmbed(stream, user));
 			break;
 	}
 }
