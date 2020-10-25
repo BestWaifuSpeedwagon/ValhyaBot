@@ -165,7 +165,6 @@ client.on('message',
 
 		if(!client.commands.has(commandName)) return;
 
-		/** @type {command} */
 		const command = client.commands.get(commandName);
 
 		//Vérifie si la fonction demande des arguments et si il y en a
@@ -184,8 +183,7 @@ client.on('message',
 		//Vérifie si la fonction à besoin de plus d'arguments
 		if(command.information)
 		{
-			/** @type {any} */
-			let info;
+			let info: any;
 			switch(command.information)
 			{
 				case 'database':
@@ -225,8 +223,7 @@ client.on('ready',
 
 		//Charge les streamers
 		JSON.parse(readFileSync("dist/data/streamers.json", "utf-8")).forEach(
-			/** @param {jsonStreamer} s */
-			s =>
+			(s: jsonStreamer): void =>
 			{
 				let channel = client.guilds.cache.get(s.guildId).channels.cache.get(s.channel.id) as TextChannel;
 				

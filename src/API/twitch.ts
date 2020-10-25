@@ -2,7 +2,7 @@ const config =
 {
 	TOKEN: process.env.TOKEN,
 	PREFIX: process.env.PREFIX,
-	twitchID: process.env.twitchID
+	TWITCH_ID: process.env.TWITCH_ID
 }
 
 import { get } from 'https';
@@ -79,7 +79,7 @@ export function getUserId(name: string): Promise<twitchUserResponse>
 		path: `/kraken/users?login=${name}`,
 		headers:
 		{
-			'Client-ID': config.twitchID,
+			'Client-ID': config.TWITCH_ID,
 			'Accept': 'application/vnd.twitchtv.v5+json'
 		}
 	};
@@ -116,7 +116,7 @@ export function getUserStream(id: string): Promise<TwitchStream>
 		path: `/kraken/streams/${id}`,
 		headers:
 		{
-			'Client-ID': config.twitchID,
+			'Client-ID': config.TWITCH_ID,
 			'Accept': 'application/vnd.twitchtv.v5+json'
 		}
 	};
@@ -167,15 +167,6 @@ export class Streamer
 	guildId: string;
 	guild: string;
 	online: boolean;
-	
-	/**
-	 * 
-	 * @param {string} name 
-	 * @param {TextChannel} channel
-	 * @param {string} guildId
-	 * @param {string} guild
-	 * @param {string} id
-	 */
 	
 	constructor(name: string, channel: TextChannel, guildId: string, guild: string, id: string)
 	{

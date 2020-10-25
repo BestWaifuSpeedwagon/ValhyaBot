@@ -20,11 +20,6 @@ export async function run(client: Client, message: Message)
 		}
 	}
 	
-	/**
-	 * @param {Vector} position
-	 * @param {Vector} goal
-	 * @param {number} score
-	 */
 	function renderGrid(position: Vector, goal: Vector, score: number)
 	{
 		let str = `Score : ${score}\n`;
