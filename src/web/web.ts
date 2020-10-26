@@ -1,13 +1,16 @@
 import express from 'express';
-
+import bodyParser from 'body-parser';
 
 const app = express();
 
-app.listen(process.env.PORT, () => console.log('Server started...'));
+app.use(bodyParser.json({ strict: false }));
 
-app.get('/streamer', 
-	data =>
+app.post('/streamer',
+	(req, res) =>
 	{
-		console.log(data);
+		console.log(req.body);
+		res.sendStatus(200);
 	}
 );
+
+app.listen(8080, () => console.log('Server started...'));
