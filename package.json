@@ -4,7 +4,7 @@
   "description": "",
   "main": "./dist/main.js",
   "scripts": {
-    "start": "node dist/main.js",
+    "start": "node dist/web/web.js",
     "postinstall": "tsc && mv assets dist/ && rm -v -rf src"
   },
   "author": "Kamagyu, davawen",

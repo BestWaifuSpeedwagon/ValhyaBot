@@ -1,7 +1,7 @@
 import { Client, Message } from "discord.js";
 import { QueueConstruct, Song } from '../../API/music.js';
 
-import * as ytdl from 'ytdl-core';
+import ytdl from 'ytdl-core';
 
 export async function run(client: Client, message: Message, args: string[], queue: Map<string, QueueConstruct>)
 {
