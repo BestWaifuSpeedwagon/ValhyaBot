@@ -30,36 +30,26 @@ export function run(client: Client, message: Message, args: string[], database: 
         //Si aucun argument n'est donné
         user_mention = new Collection().set(message.author.id, message.author) as Collection<string, User>;
     };
-    
+	
     user_mention.forEach(
         user =>
         {
             if(user.bot) return;
 			
-            if(!database[user.tag])
+            if(!database[user.id])
             {
-                database[user.tag] =
-                {
-                    "xp": 0,
-                    "level": 1,
-                    "requiredXp": 5,
-                    "notification": true
-                }
-                //Ecris la nouvelle personne dans le .json
-                writeFile("dist/data/level.json", JSON.stringify(database, null, 4), e => { if(e) console.log(e) });
+				return message.channel.send(`Cet utilisateur n'est pas dans la base de donné.`);
             }
 
-            let embed = new MessageEmbed()
+			message.channel.send(
+				new MessageEmbed()
                 .setColor('#008000')
                 .setTitle(`Informations sur ${user.username} !`)
                 .setThumbnail(user.avatarURL())
-                .setURL('https://github.com/BestWaifuSpeedwagon/ValhyaBot')
-
-            embed.addField('Niveau: ', `${database[user.tag].level}`, true);
-            embed.addField('Experience: ', `${Math.round(database[user.tag].xp)}`, true);
-            embed.addField('Prochain niveau: ', `${Math.ceil(database[user.tag].requiredXp)}`, true);
-
-            message.channel.send(embed);
+				.addField('Niveau: ', `${database[user.id].data.level}`, true)
+				.addField('Experience: ', `${Math.round(database[user.id].data.xp)}`, true)
+				.addField('Prochain niveau: ', `${Math.ceil(database[user.id].data.requiredXp)}`, true)
+			);
         }
 
     );

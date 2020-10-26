@@ -2,7 +2,8 @@ import { Client, Message, MessageEmbed, Guild, TextChannel } from "discord.js";
 import { getUser } from '../../API/twitch.js';
 import {writeFile} from 'fs';
 
-//export async function run(client: Client, message: Message, args: string[], streamers: Streamer[])
+export async function run(client: Client, message: Message, args: string[])
+{
 //{
 //	switch(args.shift())
 //	{
@@ -83,15 +84,15 @@ import {writeFile} from 'fs';
 //			message.channel.send('Commandes disponibles :\n\`streamer add <streamer> <salon> <...>\nstreamer remove <streamer 1> <streamer 2> <etc...>\nstreamer list\`')
 //			break;
 //	}
-//}
+}
 
-//export const help = 
-//{
-//	name: "streamer",
-//	description: "Ajoute/retire le streamer donné à la vérification régulière",
-//	args: 1,
-//	usage: "<add | remove | list>",
-//	category: 'twitch'
-//}
+export const help = 
+{
+	name: "streamer",
+	description: "Ajoute/retire le streamer donné à la vérification régulière",
+	args: 1,
+	usage: "<add | remove | list>",
+	category: 'twitch'
+}
 
-//export const information = 'streamers';
+export const information = 'streamers';

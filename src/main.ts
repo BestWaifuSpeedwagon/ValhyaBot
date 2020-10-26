@@ -5,11 +5,15 @@ const config =
 {
 	TOKEN: process.env.TOKEN,
 	PREFIX: process.env.PREFIX,
-	TWITCH_ID: process.env.TWITCH_ID
+	TWITCH_ID: process.env.TWITCH_ID,
+	FAUNA_SECRET: process.env.FAUNA_SECRET,
+	FAUNA_KEY: process.env.FAUNA_KEY
 }
 
 import { Client, ClientOptions, Collection, Message, TextChannel } from 'discord.js';
 import {readdirSync, writeFile, readFileSync} from 'fs';
+
+//#region Commandes
 
 interface Command
 {
@@ -40,8 +44,6 @@ class CustomClient extends Client
 
 let client = new CustomClient();
 
-//#region Functions
-
 function loadCommands(dir = __dirname + "/commands/"): void
 {
 	readdirSync(dir).forEach(
@@ -71,75 +73,127 @@ function loadCommands(dir = __dirname + "/commands/"): void
 	)
 }
 
+loadCommands();
+
 //#endregion
 
 //#region Chargement / Informations
 
-//Charge les commandes
-loadCommands();
-
-//Charge l'api twitch
+//Charge les libraries
 import { getUser, twitchEmbed, getStream, getGame } from './API/twitch.js';
-
-//Définis la base de données
-interface UserLevel
-{
-	xp: number;
-	level: number;
-	requiredXp: number;
-	notification: boolean;
-}
-
-let db: { [key: string]: UserLevel; };
-
-export { CustomClient, Command, UserLevel };
 import { QueueConstruct } from './API/music';
 
+import * as faunadb from 'faunadb';
+
+//FaunaDB
+
+const faunaClient = new faunadb.Client({ secret: config.FAUNA_SECRET })
+
+const q = faunadb.query;
+
+interface UserLevel
+{
+	ref: unknown, //Ne sais pas comment exprimer `Ref(Collection(x), y)`
+	ts: number,
+	data: 
+	{
+		id: string;
+		xp: number;
+		level: number;
+		requiredXp: number;
+		notification: boolean;
+	}
+}
+
+let db:{ [key: string]: UserLevel } = {};
+
+//Get database
+faunaClient.query(
+	q.Map(
+		q.Paginate(q.Documents(q.Collection('levels'))),
+		q.Lambda(x => q.Get(x))
+	)
+).then(
+	(data: {data: UserLevel[]}) =>
+	{
+		data.data.forEach(
+			d =>
+			{
+				db[d.data.id] = d;
+			}
+		);
+	}
+);
+
+//Musique
 const queue: Map<string, QueueConstruct> = new Map();
+
+//Exportation
+export { CustomClient, Command, UserLevel };
+
+
+//#endregion
+
+//#region Functions
 
 //#endregion
 
 client.on('message',
-	message => 
+	async message => 
 	{
-		//#region Niveau / xp
-
 		if(message.author.bot) return;
-		if(!db[message.author.tag]) 
+		
+		//#region Niveau / xp
+		
+		if(!db[message.author.id])
 		{
-			db[message.author.tag] =
-			{
-				"xp": 0,
-				"level": 1,
-				"requiredXp": 5,
-				"notification": false
-			};
+			db[message.author.id] = await faunaClient.query(
+				q.Create(
+					q.Collection('levels'),
+					{
+						data:
+						{
+							id: message.author.id,
+							level: 0,
+							xp: 0,
+							requiredXp: 5,
+							notification: false
+						}
+					}
+				)
+			)
 		}
+		
+		let userlevel = db[message.author.id];
+		
+		userlevel.data.xp += message.content.length / 3;
 
-		let userlevel = db[message.author.tag];
-
-		userlevel.xp += message.content.length / 3;
-
-		if(userlevel.xp >= userlevel.requiredXp)
+		if(userlevel.data.xp >= userlevel.data.requiredXp)
 		{
-			while(userlevel.xp >= userlevel.requiredXp)
+			while(userlevel.data.xp >= userlevel.data.requiredXp)
 			{
-				userlevel.level++;
-				userlevel.xp = userlevel.xp - userlevel.requiredXp;
+				userlevel.data.level++;
+				userlevel.data.xp = userlevel.data.xp - userlevel.data.requiredXp;
 			}
 
 			//Redéfini le niveau d'xp requis
-			userlevel.requiredXp = userlevel.level * 5 + Math.pow(1.005, userlevel.level);
+			userlevel.data.requiredXp = userlevel.data.level * 5 + Math.pow(1.005, userlevel.data.level);
 
-			if(userlevel.notification)
+			if(userlevel.data.notification)
 			{
-				message.author.send(`Bravo ${message.author}, tu es passé au niveau ${userlevel.level} !\nCeci est envoyé automatiquement, pour désactiver les notification, fait \`!vbot notification\``);
+				message.author.send(`Bravo ${message.author}, tu es passé au niveau ${userlevel.data.level} !\nCeci est envoyé automatiquement, pour désactiver les notification, fait \`!vbot notification\``);
 			}
 		}
 		
-
+		faunaClient.query(
+			q.Update(
+				userlevel.ref,
+				{ data: userlevel.data }
+			)
+		)
+		
 		//#endregion
-		//#region Test de la commande
+		//#region Controle de la commande
 		//Est-ce que le message commence par le préfixe voulu?
 		if(!message.content.startsWith(config.PREFIX)) return;
 
