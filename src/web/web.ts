@@ -13,4 +13,4 @@ app.post('/streamer',
 	}
 );
 
-app.listen(8080, () => console.log('Server started...'));
+app.listen(process.env.PORT, () => console.log('Server started...'));
