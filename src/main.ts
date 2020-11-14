@@ -15,9 +15,11 @@ import {readdirSync, writeFile, readFileSync} from 'fs';
 
 //#region Commandes
 
+type CommandInformation = "database" | "music" | "faunaClient";
+
 interface Command
 {
-	run: {(client: Client, message: Message, args: string[], information?: any): void};
+	run: { ( client: Client, message: Message, args: string[], information?: any[] ): void };
 	help: {
 		name: string;
 		description: string;
@@ -25,7 +27,7 @@ interface Command
 		usage: string;
 		category: string | null;
 	},
-	information?: string;
+	information: CommandInformation[];
 }
 
 class CustomClient extends Client
@@ -105,7 +107,12 @@ interface UserLevel
 	}
 }
 
-let db:{ [key: string]: UserLevel } = {};
+interface DataBase
+{
+	[key: string]: UserLevel;
+}
+
+let db: DataBase = {};
 
 //Get database
 faunaClient.query(
@@ -129,7 +136,7 @@ faunaClient.query(
 const queue: Map<string, QueueConstruct> = new Map();
 
 //Exportation
-export { CustomClient, Command, UserLevel };
+export { CustomClient, Command, UserLevel, DataBase };
 
 
 //#endregion
@@ -144,6 +151,7 @@ client.on('message',
 		if(message.author.bot) return;
 		
 		//#region Niveau / xp
+		
 		
 		if(!db[message.author.id])
 		{
@@ -193,7 +201,9 @@ client.on('message',
 		)
 		
 		//#endregion
+		
 		//#region Controle de la commande
+		
 		//Est-ce que le message commence par le préfixe voulu?
 		if(!message.content.startsWith(config.PREFIX)) return;
 
@@ -224,21 +234,33 @@ client.on('message',
 		//#endregion
 
 		//Vérifie si la fonction à besoin de plus d'arguments
-		if(command.information)
+		if(command.information.length > 0)
 		{
-			let info: any;
-			switch(command.information)
-			{
-				case 'database':
-					info = db;
-					break;
-				case 'music':
-					info = queue;
-					break;
-				default:
-					console.log(`Information ${command.information} n'existe pas.`);
-					break;
-			}
+			let info: any[] = [];
+			
+			command.information.forEach(
+				(i) =>
+				{
+					let pushed: any = undefined;
+					switch(i)
+					{
+						case 'database':
+							pushed = db;
+							break;
+						case 'music':
+							pushed = queue;
+							break;
+						case 'faunaClient':
+							pushed = faunaClient;
+							break;
+						default:
+							console.log(`Information ${command.information} n'existe pas.`);
+							break;
+					}
+					
+					info.push(pushed);
+				}
+			);
 
 			//Lance la fonction avec les arguments en plus
 			command.run(client, message, args, info);

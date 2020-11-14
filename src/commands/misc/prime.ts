@@ -22,3 +22,5 @@ export const help =
 	args: true,
 	category: null
 }
+
+export const information = [];

@@ -1,7 +1,7 @@
 import { Client, Message } from "discord.js";
 import { QueueConstruct } from '../../API/music.js';
 
-export function run(client: Client, message: Message, args: string[], queue: Map<string, QueueConstruct>)
+export function run(client: Client, message: Message, args: string[], [queue]: [Map<string, QueueConstruct>])
 {
 	if(!queue.has(message.guild.id)) return;
 	if(args[0].startsWith('0')) message.channel.send('Ne peux pas retirer le premier élément!');
@@ -31,4 +31,4 @@ export const help =
 	category: 'music'
 }
 
-export const information = "music";
+export const information = ["music"];

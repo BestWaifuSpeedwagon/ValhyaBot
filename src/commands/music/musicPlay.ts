@@ -3,7 +3,7 @@ import { QueueConstruct, Song } from '../../API/music.js';
 
 import ytdl from 'ytdl-core';
 
-export async function run(client: Client, message: Message, args: string[], queue: Map<string, QueueConstruct>)
+export async function run(client: Client, message: Message, args: string[], [queue]: [Map<string, QueueConstruct>])
 {
 	try
 	{
@@ -77,4 +77,4 @@ export const help =
 	category: 'music'
 }
 
-export const information = 'music';
+export const information = ['music'];

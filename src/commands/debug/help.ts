@@ -60,3 +60,5 @@ export const help =
 	args: false,
 	category: null
 }
+
+export const information = [];

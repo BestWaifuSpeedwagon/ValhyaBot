@@ -1,7 +1,7 @@
 import { QueueConstruct } from '../../API/music';
 import { Client, Message } from 'discord.js';
 
-export function run(client: Client, message: Message, args: string[], queue: Map<string, QueueConstruct>)
+export function run(client: Client, message: Message, args: string[], [queue]: [Map<string, QueueConstruct>])
 {
 	try
 	{
@@ -34,4 +34,4 @@ export const help =
 	category: 'music'
 }
 
-export const information = "music";
+export const information = ["music"];

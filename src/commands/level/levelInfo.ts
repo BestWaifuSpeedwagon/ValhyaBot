@@ -1,9 +1,7 @@
 import { MessageEmbed, Client, Message, GuildMember, Collection, Guild, User } from "discord.js";
-import {UserLevel} from '../../main';
-import {writeFile} from 'fs';
+import { DataBase } from '../../main';
 
-
-export function run(client: Client, message: Message, args: string[], database: { [key: string]: UserLevel; })
+export function run(client: Client, message: Message, args: string[], [database]: [ DataBase ])
 {
     //Assigne member_mention au type voulu
     let member_mention: Collection<string, GuildMember>;
@@ -64,4 +62,4 @@ export const help =
 	category: 'level'
 };
 
-export const information = 'database';
+export const information = ['database'];

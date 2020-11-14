@@ -29,3 +29,5 @@ export const help =
 	usage: "<hot | new | rising>",
 	category: null
 }
+
+export const information = [];

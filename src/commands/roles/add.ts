@@ -33,3 +33,5 @@ export const help =
 	args: true,
 	category: 'role'
 }
+
+export const information = [];

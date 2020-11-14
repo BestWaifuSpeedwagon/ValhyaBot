@@ -125,3 +125,5 @@ export const help =
 	args: false,
 	category: 'game'
 }
+
+export const information = [];

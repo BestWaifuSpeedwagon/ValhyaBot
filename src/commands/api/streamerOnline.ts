@@ -30,3 +30,5 @@ export const help =
 	usage: "<nom>",
 	category: 'twitch',
 }
+
+export const information = [];

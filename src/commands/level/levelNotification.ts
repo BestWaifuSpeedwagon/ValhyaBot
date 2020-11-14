@@ -1,14 +1,21 @@
 import { Client, Message } from "discord.js";
-import {UserLevel} from '../../main';
-import { writeFile } from 'fs';
+import { Client as FaunaClient, query as q } from 'faunadb';
+import { DataBase } from '../../main';
 
-export function run(client: Client, message: Message, args: string[], database: { [s: string]: UserLevel; })
+export function run(client: Client, message: Message, args: string[], [database, faunaClient]: [ DataBase, FaunaClient ])
 {
-	database[message.author.id].data.notification = !database[message.author.id].data.notification;
+	let notif = !database[message.author.id].data.notification;
 	
-	message.channel.send(`Vos notifications ont étés ${database[message.author.id].data.notification ? 'activées' : 'désactivées'}!`);
+	database[message.author.id].data.notification = notif;
 	
-	writeFile("dist/data/level.json", JSON.stringify(database, null, 4), e => { if(e) console.log(e) });
+	message.channel.send(`Vos notifications ont étés ${notif ? 'activées' : 'désactivées'}!`);
+	
+	faunaClient.query(
+		q.Update(
+			database[message.author.id].ref,
+			{ data: { notification: notif } }
+		)
+	);
 }
 
 export const help = 
@@ -20,4 +27,4 @@ export const help =
 	category: 'level'
 };
 
-export const information = "database";
+export const information = ["database", "faunaClient"];

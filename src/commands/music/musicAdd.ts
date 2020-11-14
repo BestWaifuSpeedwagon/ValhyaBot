@@ -2,7 +2,7 @@ import { Client, Message } from "discord.js";
 import { QueueConstruct, Song, searchQuery, playlistQuery } from '../../API/music.js';
 import * as ytdl from 'ytdl-core';
 
-export async function run(client: Client, message: Message, args: string[], queue: Map<string, QueueConstruct>)
+export async function run(client: Client, message: Message, args: string[], [queue]: [ Map<string, QueueConstruct> ])
 {
 	try
 	{
@@ -88,4 +88,4 @@ export const help =
 	category: 'music'
 }
 
-export const information = 'music';
+export const information = ['music'];

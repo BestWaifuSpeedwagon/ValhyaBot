@@ -31,4 +31,6 @@ export const help =
     usage: "<Roles à supprimer>",
 	args: true,
 	category: 'role'
-}
+};
+
+export const information = [];
