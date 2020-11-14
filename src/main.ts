@@ -15,7 +15,7 @@ import {readdirSync, writeFile, readFileSync} from 'fs';
 
 //#region Commandes
 
-type CommandInformation = "database" | "music" | "faunaClient";
+type CommandInformation = "database" | "music" | "faunaClient" | "streamers";
 
 interface Command
 {
@@ -80,14 +80,8 @@ loadCommands();
 //#endregion
 
 //#region Chargement / Informations
-
-//Charge les libraries
-import { getUser, twitchEmbed, getStream, getGame } from './API/twitch.js';
-import { QueueConstruct } from './API/music';
-
-import * as faunadb from 'faunadb';
-
 //FaunaDB
+import faunadb from 'faunadb';
 
 const faunaClient = new faunadb.Client({ secret: config.FAUNA_SECRET })
 
@@ -95,7 +89,7 @@ const q = faunadb.query;
 
 interface UserLevel
 {
-	ref: unknown, //Ne sais pas comment exprimer `Ref(Collection(x), y)`
+	ref: faunadb.ExprArg; //Ne sais pas comment exprimer `Ref(Collection(x), y)`
 	ts: number,
 	data: 
 	{
@@ -107,12 +101,12 @@ interface UserLevel
 	}
 }
 
-interface DataBase
+interface Database
 {
 	[key: string]: UserLevel;
 }
 
-let db: DataBase = {};
+let db: Database = {};
 
 //Get database
 faunaClient.query(
@@ -132,11 +126,42 @@ faunaClient.query(
 	}
 );
 
+//Streamers
+import { TwitchUser, getUser, twitchEmbed, getStream, getGame } from './API/twitch.js';
+
+interface Streamer
+{
+	ref: faunadb.ExprArg;
+	ts: number;
+	data:
+	{
+		user: TwitchUser;
+		streaming: boolean;
+		channelId: string;
+	};
+}
+
+let streamers: Streamer[] = [];
+
+faunaClient.query(
+	q.Map(
+		q.Paginate(q.Documents(q.Collection('streamers'))),
+		q.Lambda(x => q.Get(x))
+	)
+).then(
+	(data: { data: Streamer[]; }) =>
+	{
+		streamers = [...data.data];
+	}
+);
+
 //Musique
+import { QueueConstruct } from './API/music';
+
 const queue: Map<string, QueueConstruct> = new Map();
 
 //Exportation
-export { CustomClient, Command, UserLevel, DataBase };
+export { CustomClient, Command, UserLevel, Database, Streamer };
 
 
 //#endregion
@@ -253,6 +278,9 @@ client.on('message',
 						case 'faunaClient':
 							pushed = faunaClient;
 							break;
+						case 'streamers':
+							pushed = streamers;
+							break;
 						default:
 							console.log(`Information ${command.information} n'existe pas.`);
 							break;
@@ -277,6 +305,51 @@ client.on('ready',
 
 		client.user.setStatus("online");
 		client.user.setActivity("!vbot", { type: "LISTENING" });
+		
+		setInterval(
+			() =>
+			{
+				streamers.forEach(
+					async (s, index) =>
+					{
+						let _stream = await getStream(s.data.user.id, "user_id");
+						
+						if(!s.data.streaming)
+						{
+							if(!_stream) return; //Similar to continue
+							
+							streamers[index].data.streaming = true;
+							
+							faunaClient.query(
+								q.Update(
+									s.ref,
+									{ data: { streaming: true } }
+								)
+							);
+							
+							let _channel = client.channels.cache.get(s.data.channelId) as TextChannel;
+							
+							if(!_channel) return console.log(`Channel of ${s.data.user.display_name} doesn't exists!`);
+							
+							_channel.send( await twitchEmbed(_stream, s.data.user) );
+						}
+						else
+						{
+							if(_stream) return;
+							
+							streamers[index].data.streaming = false;
+							
+							faunaClient.query(
+								q.Update(
+									s.ref,
+									{ data: { streaming: false } }
+								)
+							);
+						}
+					}
+				);
+			}, 60*1000
+		);
 	}
 );
 

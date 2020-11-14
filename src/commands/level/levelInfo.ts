@@ -1,7 +1,7 @@
 import { MessageEmbed, Client, Message, GuildMember, Collection, Guild, User } from "discord.js";
-import { DataBase } from '../../main';
+import { Database } from '../../main';
 
-export function run(client: Client, message: Message, args: string[], [database]: [ DataBase ])
+export function run(client: Client, message: Message, args: string[], [database]: [ Database ])
 {
     //Assigne member_mention au type voulu
     let member_mention: Collection<string, GuildMember>;

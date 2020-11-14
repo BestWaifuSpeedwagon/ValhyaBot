@@ -1,8 +1,8 @@
 import { Client, Message } from "discord.js";
 import { Client as FaunaClient, query as q } from 'faunadb';
-import { DataBase } from '../../main';
+import { Database } from '../../main';
 
-export function run(client: Client, message: Message, args: string[], [database, faunaClient]: [ DataBase, FaunaClient ])
+export function run(client: Client, message: Message, args: string[], [database, faunaClient]: [ Database, FaunaClient ])
 {
 	let notif = !database[message.author.id].data.notification;
 	

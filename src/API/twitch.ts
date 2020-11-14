@@ -38,6 +38,7 @@ export interface TwitchStream
 	user_id: string;
 	user_name: string;
 	game_id: string;
+	game_name: string;
 	type: string;
 	title: string;
 	viewer_count: number;
@@ -151,12 +152,15 @@ export function getGame(id: string): Promise<TwitchGame>
 	)
 }
 
-export function getStream(id: string): Promise<TwitchStream>
+/**
+ * @param type user_id utilise l'id d'un utilisateur obtenu grâce à getUser, et user_login utilise directement le nom.
+ */
+export function getStream(id: string, type: ("user_id" | "user_login")): Promise<TwitchStream>
 {
 	let options: RequestOptions =
 	{
 		hostname: 'api.twitch.tv',
-		path: `/helix/streams?user_id=${id}`,
+		path: `/helix/streams?${type}=${id}`,
 		headers:
 		{
 			'client-id': config.TWITCH_ID,
@@ -192,17 +196,17 @@ export function getStream(id: string): Promise<TwitchStream>
 
 export async function twitchEmbed(stream: TwitchStream, user: TwitchUser): Promise<MessageEmbed>
 {
-	let game = await getGame(stream.game_id);
+	let thumbnail = stream.thumbnail_url.split("{width}")[0] + "647x400.jpg?" + Math.round(Math.random() * 1000).toString(); //Ajoute la taille puis un nombre pour éviter le caching de discord
 	
 	let embed = new MessageEmbed()
 		.setColor("#d54e12")
 		.setAuthor(stream.user_name)
 		.setTitle(stream.title)
 		.setThumbnail(user.profile_image_url)
-		.setImage(stream.thumbnail_url + '?' + Math.round(Math.random()*1000).toString())
+		.setImage(thumbnail)
 		.setURL(`https://www.twitch.tv/${stream.user_name}`)
-		.addField('Jeu', game.name, true)
+		.addField('Jeu', stream.game_name, true)
 		.addField('Viewers', stream.viewer_count)
-	
+		
 	return embed;
 }
