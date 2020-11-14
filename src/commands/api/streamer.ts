@@ -1,59 +1,9 @@
 import { Client, Message, MessageEmbed, Guild, TextChannel } from "discord.js";
 import { getUser } from '../../API/twitch.js';
-import https from 'https';
+import {writeFile} from 'fs';
 
 export async function run(client: Client, message: Message, args: string[])
 {
-	switch(args.shift())
-	{
-		case 'add':
-			let user = await getUser(args[0]);
-			
-			const data = JSON.stringify(
-				{
-					hub: 
-					{
-						callback: 'https://valhyabot.herokuapp.com/streamer',
-						mode: 'subscribe',
-						topic: 'https://api.twitch.tv/helix/streams',
-						lease_seconds: 864000
-					}
-				}
-			);
-			
-			const options = {
-				hostname: 'https://api.twitch.tv',
-				path: '/helix/webhooks/hub',
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'Content-Length': data.length,
-				},
-			};
-
-			const req = https.request(options,
-				(res) =>
-				{
-					console.log(`statusCode: ${res.statusCode}`);
-
-					res.on('data', (d) =>
-					{
-						process.stdout.write(d);
-					});
-				}
-			);
-
-			req.on('error', (error) =>
-			{
-				console.error(error);
-			});
-
-			req.write(data);
-			req.end()
-			
-			break;
-	}
-	
 //{
 //	switch(args.shift())
 //	{
